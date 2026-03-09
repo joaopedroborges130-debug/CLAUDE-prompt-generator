@@ -164,6 +164,34 @@
   .shortcut-btn.chatgpt:hover { background: rgba(16,185,129,0.08); border-color: #34d399; }
   ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; } ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 
+  /* SAVING OVERLAY */
+  .saving-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,11,0.85); z-index: 2000; align-items: center; justify-content: center; flex-direction: column; gap: 1.2rem; backdrop-filter: blur(4px); }
+  .saving-overlay.visible { display: flex; }
+  .saving-overlay .loader { margin: 0; }
+  .saving-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); }
+  .saving-detail { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  /* LIBRARY GENERIC PROMPTS VIEW */
+  .lib-essay-view { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+  .lib-essay-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--surface2); flex-wrap: wrap; gap: 0.8rem; }
+  .lib-essay-meta { display: flex; flex-direction: column; gap: 0.2rem; }
+  .lib-essay-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); }
+  .lib-essay-date { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); }
+  .lib-essay-actions { display: flex; gap: 0.6rem; align-items: center; }
+  .lib-essay-img { width: 100%; max-height: 200px; object-fit: cover; border-bottom: 1px solid var(--border); display: block; }
+  .lib-generic-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; padding: 1.2rem 1.5rem 0.5rem; }
+  .lib-prompts-list { padding: 0 1rem 1rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .lib-prompt-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; overflow: hidden; }
+  .lib-prompt-item-header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); }
+  .lib-prompt-item-name { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
+  .lib-prompt-item-body { padding: 0.9rem 1rem; font-size: 0.82rem; line-height: 1.8; color: #c8c4bc; font-family: 'DM Sans', sans-serif; white-space: pre-wrap; }
+  .btn-back-lib { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1.2rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border-radius: 2px; }
+  .btn-back-lib:hover { border-color: var(--muted); color: var(--text); }
+  .lib-copy-all-generic { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem 1.2rem; font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
+  .lib-copy-all-generic:hover { background: rgba(200,169,110,0.08); }
+  .lib-no-generics { padding: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); text-align: center; }
+  .generic-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(200,169,110,0.1); border: 1px solid rgba(200,169,110,0.3); border-radius: 10px; padding: 0.2rem 0.7rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.8rem; }
+
   @media (max-width: 700px) {
     header { padding: 1.5rem; } .container { padding: 2rem 1.2rem; }
     .photo-slots { grid-template-columns: 1fr; } .library-grid { grid-template-columns: 1fr; }
@@ -172,6 +200,13 @@
 </style>
 </head>
 <body>
+
+<!-- SAVING OVERLAY -->
+<div class="saving-overlay" id="savingOverlay">
+  <div class="loader"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
+  <div class="saving-title">Gerando prompts genéricos...</div>
+  <div class="saving-detail">Extraindo referência para uso com outros clientes</div>
+</div>
 
 <header>
   <div class="logo">LENS <span>ai</span></div>
@@ -365,7 +400,9 @@ let currentEssayType = 'profissional';
 let allPromptsText = '';
 let lastAnalysisText = '';
 let lastPromptMatches = [];
+let lastGenericPrompts = [];
 let currentLibCat = 'profissional';
+let currentOpenEssayId = null;
 
 // ─────────────────────────────────────────────
 // API KEY — salva automaticamente no localStorage
@@ -692,13 +729,41 @@ function parseAndRender(text) {
 function escapeHtml(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 document.addEventListener('click', function(e) {
+  // Copiar todos os genéricos (biblioteca)
+  const btnCopyAll = e.target.closest('.lib-copy-all-generic[data-copy-essay-id]');
+  if (btnCopyAll) {
+    const essayId = parseInt(btnCopyAll.getAttribute('data-copy-essay-id'));
+    const essay = getLibrary().find(en => en.id === essayId);
+    if (!essay || !essay.genericPrompts) return;
+    const GENERIC_NAMES = ['Recriação Fiel', 'Variação de Ângulo', 'Variação de Pose', 'Variação de Enquadramento', 'Variação de Movimento / Expressão'];
+    const allText = essay.genericPrompts.map((p, i) => `=== ${GENERIC_NAMES[i].toUpperCase()} ===\n\n${p}`).join('\n\n\n');
+    const orig = btnCopyAll.textContent;
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(allText).then(() => { btnCopyAll.textContent = '✓ Copiados!'; setTimeout(() => { btnCopyAll.textContent = orig; }, 2500); }).catch(() => {});
+    }
+    return;
+  }
+  // Copiar prompt personalizado (tela de geração)
   const btn = e.target.closest('.btn-copy[data-idx]');
-  if (!btn) return;
-  const el = document.getElementById('promptText' + btn.getAttribute('data-idx'));
-  if (!el) return;
-  const txt = el.textContent;
-  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(txt).then(() => flashCopied(btn)).catch(() => fallbackCopy(txt, btn));
-  else fallbackCopy(txt, btn);
+  if (btn) {
+    const el = document.getElementById('promptText' + btn.getAttribute('data-idx'));
+    if (!el) return;
+    const txt = el.textContent;
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(txt).then(() => flashCopied(btn)).catch(() => fallbackCopy(txt, btn));
+    else fallbackCopy(txt, btn);
+    return;
+  }
+  // Copiar prompt genérico individual (biblioteca)
+  const btnG = e.target.closest('.btn-copy[data-generic-idx]');
+  if (btnG) {
+    const essayId = btnG.getAttribute('data-essay-id');
+    const idx = btnG.getAttribute('data-generic-idx');
+    const el = document.getElementById(`genericPromptText${essayId}_${idx}`);
+    if (!el) return;
+    const txt = el.textContent;
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(txt).then(() => flashCopied(btnG)).catch(() => fallbackCopy(txt, btnG));
+    else fallbackCopy(txt, btnG);
+  }
 });
 
 function fallbackCopy(text, btn) {
@@ -730,8 +795,29 @@ function copyAll() {
 function getLibrary() { try { return JSON.parse(localStorage.getItem('lensai_lib_v3') || '[]'); } catch { return []; } }
 function saveLibraryData(d) { localStorage.setItem('lensai_lib_v3', JSON.stringify(d)); }
 
-function saveEssay() {
+async function saveEssay() {
   if (!lastPromptMatches.length || !refDataUrl) { showError('Gere os prompts antes de salvar o ensaio.'); return; }
+
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (!apiKey) { showError('Insira sua chave API antes de salvar.'); return; }
+
+  // Mostrar overlay de salvamento
+  document.getElementById('savingOverlay').classList.add('visible');
+  const btn = document.querySelector('.btn-save-essay');
+  btn.disabled = true;
+
+  // Gerar prompts genéricos (apenas foto de referência)
+  let genericPrompts = [];
+  try {
+    genericPrompts = await generateGenericPrompts(apiKey);
+  } catch(e) {
+    // Se falhar, salva sem genéricos
+    console.warn('Falha ao gerar prompts genéricos:', e);
+  }
+
+  document.getElementById('savingOverlay').classList.remove('visible');
+  btn.disabled = false;
+
   const birthdayAge = document.getElementById('birthdayAge').value.trim();
   const typeInfo = ESSAY_TYPES[currentEssayType];
   let label = typeInfo.label;
@@ -741,39 +827,152 @@ function saveEssay() {
   const essay = {
     id: Date.now(), date: new Date().toISOString(), label,
     category: currentEssayType,
-    image: refDataUrl, // apenas foto de referência
-    analysis: lastAnalysisText, prompts: lastPromptMatches,
+    image: refDataUrl,
+    analysis: lastAnalysisText,
+    prompts: lastPromptMatches,
+    genericPrompts: genericPrompts,
   };
   const lib = getLibrary(); lib.unshift(essay); saveLibraryData(lib);
+  lastGenericPrompts = genericPrompts;
   renderLibrary();
 
-  const btn = document.querySelector('.btn-save-essay');
   const orig = btn.textContent; btn.textContent = '✓ Ensaio salvo!';
   setTimeout(() => { btn.textContent = orig; }, 2000);
   document.querySelector('.library-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+async function generateGenericPrompts(apiKey) {
+  const GENERIC_PROMPT_TYPES = [
+    'Recriação Fiel',
+    'Variação de Ângulo',
+    'Variação de Pose',
+    'Variação de Enquadramento',
+    'Variação de Movimento / Expressão',
+  ];
+
+  const genericFaceAnchor = `Her facial features must be accurately matched from the provided client reference image, and no facial characteristics should be generated independently. Her hairstyle, hair texture, hair length, and hair color must be accurately matched from the provided client reference image. Her body type, physical build, proportions, and overall physique must be accurately matched from the provided client reference image, ensuring exact fidelity to the reference.`;
+
+  const systemGeneric = `You are a world-class professional photography prompt engineer specializing in Flow Labs AI image generation. You create ultra-detailed, cinematographic prompts that produce photorealistic studio portrait photographs.
+
+You receive ONE image — a REFERENCE PHOTO. Extract EVERYTHING from it: exact scene/background, lighting setup (direction, intensity, color temperature, softbox positions, rim light, fill light), camera angle, focal length, framing, composition, depth of field, atmosphere, style, EXACT POSE (body position, limbs, head angle, gaze direction), EXACT CLOTHING (every detail: color, fabric, cut, fit, accessories, jewelry), and any props or objects in the scene.
+
+GOLDEN RULE: Generate prompts that describe the scene, lighting, clothing, pose and atmosphere from the reference photo. The subject's face and physical characteristics will be filled in by the user later — use the face anchor placeholder exactly as provided. Never invent clothing or accessories. Write prompts in English in a cinematic, ultra-detailed photographic style.`;
+
+  const userGeneric = `Analyze the reference image and generate 5 ultra-detailed generic Flow Labs prompts based ONLY on this reference photo. These prompts will be reused with different clients, so the scene, lighting, pose and clothing must be extracted with maximum detail from the reference, but NO specific face description should be included — use only the face anchor placeholder.
+
+ABSOLUTE RULE: Respond ONLY with the markers below. No text outside markers.
+
+[GENPROMPT1_INICIO]
+Ultra-realistic photo, 8K resolution, professional studio portrait setup. [Extract exact scene from reference — background, environment, full atmosphere, all props and objects with complete material detail]. [${genericFaceAnchor}] [Describe exact clothing from reference with full material realism: fabric type, color, cut, fit, all details, jewelry, accessories — every item exactly as reference photo.] [Describe exact pose from reference: body position, limb placement, hand position, head angle, gaze direction — exactly as reference.] [Describe any props or objects with full material detail: surface texture, reflections, color, position.] Lighting is [full lighting description from reference: key light direction and type, fill light, rim/hair light, background light, color temperatures, shadow detail, specular highlights on materials]. Shot using a full-frame professional camera with an 85mm portrait lens, [exact framing from reference: depth of field, camera angle, perspective]. High dynamic range, extremely detailed textures, realistic materials, balanced contrast, cinematic color grading, ultra-realistic photo quality. Natural photographic imperfections such as slight fabric creases, subtle skin texture on visible areas, and faint micro-shadow transitions.
+--negative ${NEGATIVE_PROMPT}
+[GENPROMPT1_FIM]
+
+[GENPROMPT2_INICIO]
+Ultra-realistic photo, 8K resolution, professional studio portrait setup. [Same scene from reference with full atmosphere]. [${genericFaceAnchor}] [Same clothing from reference as Prompt 1.] ANGLE VARIATION: camera repositioned at 30° to the right lateral angle, slightly elevated 10cm above eye level, creating a different perspective while maintaining the same scene intimacy. [Same pose from reference adapted to angle.] [Same props and objects from reference.] [Same lighting from reference.] Full-frame camera, 85mm portrait lens f/1.8–f/2.2, editorial style. Material realism maintained throughout.
+--negative ${NEGATIVE_PROMPT}
+[GENPROMPT2_FIM]
+
+[GENPROMPT3_INICIO]
+Ultra-realistic photo, 8K resolution, professional studio portrait setup. [Same scene from reference with full atmosphere]. [${genericFaceAnchor}] [Same clothing from reference as Prompt 1.] POSE VARIATION: body turned three-quarter toward camera, weight shifted to right leg, left shoulder slightly forward, arms in natural relaxed position, direct gaze at camera — same clothing and scene. [Same props and objects from reference.] [Same lighting from reference.] Full-frame camera, 85mm portrait lens f/1.8–f/2.2, editorial. Material realism throughout.
+--negative ${NEGATIVE_PROMPT}
+[GENPROMPT3_FIM]
+
+[GENPROMPT4_INICIO]
+Ultra-realistic photo, 8K resolution, tight portrait close-up. [Same scene background from reference, now as shallow bokeh backdrop]. [${genericFaceAnchor}] [Same clothing from reference visible at shoulder/chest level.] FRAMING VARIATION: tight portrait crop at chest-to-head, shallow depth of field with extremely creamy background blur, maximum facial detail. [Same lighting from reference.] Full-frame camera, 85mm portrait lens f/1.4–f/1.8 for maximum bokeh.
+--negative ${NEGATIVE_PROMPT}
+[GENPROMPT4_FIM]
+
+[GENPROMPT5_INICIO]
+Ultra-realistic photo, 8K resolution, professional studio portrait setup. [Same scene from reference with full atmosphere]. [${genericFaceAnchor}] [Same clothing from reference as Prompt 1.] EXPRESSION VARIATION: subtle micro-smile on lips, gaze softly shifted 5° to the side as if noticing something off-frame, head gently tilted 8° to the right, one loose strand of hair falling naturally across the face — spontaneous candid moment frozen in time. [Same props and objects from reference.] [Same lighting from reference.] Full-frame camera, 85mm portrait lens f/1.8–f/2.2, editorial.
+--negative ${NEGATIVE_PROMPT}
+[GENPROMPT5_FIM]`;
+
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemGeneric }] },
+        contents: [{
+          parts: [
+            { inline_data: { mime_type: refType, data: refBase64 } },
+            { text: 'IMAGE — REFERENCE PHOTO: extract scene, lighting, pose, clothing, props, atmosphere with full detail.' },
+            { text: userGeneric }
+          ]
+        }],
+        generationConfig: { maxOutputTokens: 10000, temperature: 0.6 }
+      })
+    }
+  );
+
+  if (!response.ok) {
+    const err = await response.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Erro HTTP ${response.status}`);
+  }
+  const data = await response.json();
+  const fullText = data.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('\n') || '';
+
+  const prompts = [];
+  for (let i = 1; i <= 5; i++) {
+    const p = extractBetween(fullText, `[GENPROMPT${i}_INICIO]`, `[GENPROMPT${i}_FIM]`);
+    prompts.push(p || 'Prompt genérico não encontrado.');
+  }
+  return prompts;
+}
+
 function deleteEssay(id) { saveLibraryData(getLibrary().filter(e => e.id !== id)); renderLibrary(); }
 
 function openEssay(id) {
+  currentOpenEssayId = id;
   const essay = getLibrary().find(e => e.id === id);
   if (!essay) return;
-  lastAnalysisText = essay.analysis; lastPromptMatches = essay.prompts;
-  const typeInfo = ESSAY_TYPES[essay.category] || ESSAY_TYPES.profissional;
-  document.getElementById('resultsBadge').textContent = `${typeInfo.icon} ${typeInfo.label} · Flow Labs`;
-  document.getElementById('analysisText').textContent = essay.analysis;
 
-  const grid = document.getElementById('promptsGrid'); grid.innerHTML = ''; allPromptsText = '';
-  essay.prompts.forEach((promptText, idx) => {
-    const type = PROMPT_TYPES[idx];
-    allPromptsText += `=== ${type.name.toUpperCase()} ===\n\n${promptText}\n\n\n`;
-    const card = document.createElement('div'); card.className = 'prompt-card';
-    card.innerHTML = `<div class="prompt-header"><div class="prompt-badge-wrap"><div class="prompt-number">0${idx+1}</div><div class="prompt-type"><div class="prompt-tag">${type.tag}</div><div class="prompt-name">${type.name}</div></div></div><button class="btn-copy" data-idx="${idx}"><span>⬡</span> <span class="copy-label">Copiar</span></button></div><div class="prompt-body"><div class="prompt-text" id="promptText${idx}">${escapeHtml(promptText)}</div></div>`;
-    grid.appendChild(card);
-  });
-  document.getElementById('resultsSection').classList.add('visible');
-  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const content = document.getElementById('libraryContent');
+  const dateStr = new Date(essay.date).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+  const typeInfo = ESSAY_TYPES[essay.category] || ESSAY_TYPES.profissional;
+
+  const generics = essay.genericPrompts || [];
+  const GENERIC_NAMES = ['Recriação Fiel', 'Variação de Ângulo', 'Variação de Pose', 'Variação de Enquadramento', 'Variação de Movimento / Expressão'];
+
+  let promptsHtml = '';
+  let allGenericText = '';
+
+  if (generics.length === 0) {
+    promptsHtml = `<div class="lib-no-generics">Este ensaio não possui prompts genéricos. Exclua-o e salve novamente para gerar.</div>`;
+  } else {
+    generics.forEach((p, i) => {
+      allGenericText += `=== ${GENERIC_NAMES[i].toUpperCase()} ===\n\n${p}\n\n\n`;
+      promptsHtml += `
+        <div class="lib-prompt-item">
+          <div class="lib-prompt-item-header">
+            <span class="lib-prompt-item-name">0${i+1} · ${GENERIC_NAMES[i]}</span>
+            <button class="btn-copy" data-generic-idx="${i}" data-essay-id="${id}"><span>⬡</span> <span class="copy-label">Copiar</span></button>
+          </div>
+          <div class="lib-prompt-item-body" id="genericPromptText${id}_${i}">${escapeHtml(p)}</div>
+        </div>`;
+    });
+  }
+
+  content.innerHTML = `
+    <div class="lib-essay-view">
+      <div class="lib-essay-header">
+        <div class="lib-essay-meta">
+          <div class="lib-essay-title">${escapeHtml(essay.label)}</div>
+          <div class="lib-essay-date">${typeInfo.icon} ${typeInfo.label} · ${dateStr}</div>
+        </div>
+        <div class="lib-essay-actions">
+          ${generics.length > 0 ? `<button class="lib-copy-all-generic" data-copy-essay-id="${id}">⬡ Copiar todos</button>` : ''}
+          <button class="btn-back-lib" onclick="renderLibrary()">← Voltar</button>
+        </div>
+      </div>
+      <img class="lib-essay-img" src="${essay.image}" alt="Referência">
+      <div class="generic-badge" style="margin: 1rem 1.5rem 0;">◈ Prompts Genéricos · Reutilizáveis</div>
+      <div class="lib-generic-label">5 prompts baseados apenas na referência</div>
+      <div class="lib-prompts-list">${promptsHtml}</div>
+    </div>`;
 }
+
 
 function renderLibrary() {
   const library = getLibrary();
