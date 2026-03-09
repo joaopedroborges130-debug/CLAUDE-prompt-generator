@@ -22,13 +22,7 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
   body::before {
     content: '';
@@ -40,63 +34,71 @@
     opacity: 0.5;
   }
 
-  header {
-    padding: 2.5rem 3rem 2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-  }
-
+  header { padding: 2.5rem 3rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 1.5rem; }
   .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
   .logo span { color: var(--text); font-style: italic; font-weight: 400; }
   .tagline { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
 
-  .container { max-width: 1200px; margin: 0 auto; padding: 3rem 3rem; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 3rem; }
 
-  .drop-zone {
-    border: 1.5px dashed var(--border);
-    border-radius: 4px;
-    padding: 4rem 2rem;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-  }
+  /* API KEY */
+  .api-key-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .api-key-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+  .api-key-input { flex: 1; min-width: 200px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.6rem 1rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.8rem; outline: none; transition: border-color 0.2s; }
+  .api-key-input:focus { border-color: var(--accent); }
+  .api-key-hint { font-size: 0.75rem; color: var(--muted); width: 100%; margin-top: 0.3rem; }
 
-  .drop-zone::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(200,169,110,0.05) 0%, transparent 70%);
-    pointer-events: none;
-  }
+  /* DOIS SLOTS DE FOTO */
+  .photo-slots { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
 
-  .drop-zone:hover, .drop-zone.dragging { border-color: var(--accent); background: #14141a; }
-  .drop-zone.dragging { transform: scale(1.005); }
-  .drop-icon { font-size: 3rem; margin-bottom: 1.2rem; opacity: 0.6; }
-  .drop-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text); margin-bottom: 0.5rem; }
-  .drop-sub { font-size: 0.82rem; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
-  #fileInput { display: none; }
+  .photo-slot { background: var(--surface); border: 1.5px dashed var(--border); border-radius: 4px; position: relative; overflow: hidden; transition: border-color 0.3s; }
+  .photo-slot:hover { border-color: var(--accent); }
+  .photo-slot.has-image { border-style: solid; border-color: var(--border); }
 
-  .preview-section { display: none; gap: 2rem; margin-top: 2.5rem; align-items: flex-start; }
-  .preview-section.visible { display: flex; }
-  .preview-img-wrap { flex: 0 0 280px; position: relative; }
-  .preview-img-wrap img { width: 100%; border-radius: 4px; display: block; border: 1px solid var(--border); }
-  .img-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; padding: 0.3rem 0.6rem; text-transform: uppercase; }
-  .preview-info { flex: 1; }
-  .preview-info h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin-bottom: 0.4rem; }
-  .preview-info p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; font-family: 'DM Mono', monospace; }
+  .photo-slot-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); padding: 0.8rem 1.2rem 0; display: block; }
+  .photo-slot-sublabel { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); padding: 0.2rem 1.2rem 0.6rem; display: block; }
 
+  .photo-drop { padding: 2rem 1.5rem; text-align: center; cursor: pointer; }
+  .photo-drop-icon { font-size: 2rem; opacity: 0.4; margin-bottom: 0.6rem; }
+  .photo-drop-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--text); margin-bottom: 0.3rem; }
+  .photo-drop-sub { font-size: 0.75rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+
+  .photo-preview { display: none; position: relative; }
+  .photo-preview.visible { display: block; }
+  .photo-preview img { width: 100%; height: 220px; object-fit: cover; display: block; }
+  .photo-preview-info { padding: 0.6rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+  .photo-remove { background: none; border: none; color: var(--danger); cursor: pointer; font-size: 0.7rem; font-family: 'DM Mono', monospace; letter-spacing: 0.05em; opacity: 0.7; transition: opacity 0.2s; }
+  .photo-remove:hover { opacity: 1; }
+
+  /* CONFIGURAÇÕES DO ENSAIO */
+  .essay-config { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: flex-start; }
+
+  .config-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .config-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+
+  /* Tipo de ensaio */
+  .essay-type-options { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .type-radio-label { display: flex; align-items: center; gap: 0.4rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--text); cursor: pointer; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.4rem 0.9rem; transition: all 0.2s; }
+  .type-radio-label:hover { border-color: var(--accent); }
+  .type-radio-label input[type="radio"] { display: none; }
+  .type-radio-label.active { border-color: var(--accent); color: var(--accent); background: rgba(200,169,110,0.08); }
+
+  /* Aniversário */
+  .birthday-age-wrap { display: none; align-items: center; gap: 0.6rem; margin-top: 0.4rem; }
+  .birthday-age-wrap.visible { display: flex; }
+  .birthday-age-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); }
+  .birthday-age-input { width: 80px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.8rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s; text-align: center; }
+  .birthday-age-input:focus { border-color: var(--accent); }
+
+  /* BOTÃO ANALISAR */
+  .analyze-row { display: flex; gap: 1rem; align-items: center; margin-bottom: 0; }
   .btn-analyze { background: var(--accent); color: #0a0a0b; border: none; padding: 0.85rem 2.2rem; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; font-weight: 500; }
   .btn-analyze:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,169,110,0.2); }
   .btn-analyze:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-reset-all { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.85rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
+  .btn-reset-all:hover { border-color: var(--muted); color: var(--text); }
 
-  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.85rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; margin-left: 0.8rem; }
-  .btn-reset:hover { border-color: var(--muted); color: var(--text); }
-
+  /* LOADING */
   .loading-section { display: none; text-align: center; padding: 4rem 2rem; }
   .loading-section.visible { display: block; }
   .loader { display: inline-flex; gap: 0.4rem; margin-bottom: 1.5rem; }
@@ -104,12 +106,17 @@
   .loader-dot:nth-child(2) { animation-delay: 0.2s; }
   .loader-dot:nth-child(3) { animation-delay: 0.4s; }
   @keyframes pulse { 0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
-  .loading-text { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.1em; }
   .loading-step { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
+  .loading-text { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.1em; }
 
+  /* ERROR */
+  .error-box { display: none; background: rgba(224,92,92,0.08); border: 1px solid rgba(224,92,92,0.3); border-radius: 4px; padding: 1.2rem 1.5rem; margin-top: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--danger); }
+  .error-box.visible { display: block; }
+
+  /* RESULTS */
   .results-section { display: none; margin-top: 3rem; }
   .results-section.visible { display: block; }
-  .results-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
   .results-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text); }
   .results-title span { color: var(--accent); font-style: italic; }
   .results-count { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
@@ -119,6 +126,7 @@
   .analysis-text { font-size: 0.88rem; line-height: 1.75; color: #b8b4ae; }
 
   .prompts-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+
   .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: border-color 0.25s; animation: fadeUp 0.5s ease forwards; opacity: 0; transform: translateY(12px); }
   .prompt-card:nth-child(1) { animation-delay: 0.1s; }
   .prompt-card:nth-child(2) { animation-delay: 0.2s; }
@@ -134,7 +142,6 @@
   .prompt-type { display: flex; flex-direction: column; gap: 0.15rem; }
   .prompt-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; }
   .prompt-name { font-size: 0.92rem; font-weight: 500; color: var(--text); }
-  .prompt-header-btns { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
   .btn-copy { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.45rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border-radius: 2px; display: flex; align-items: center; gap: 0.4rem; }
   .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
@@ -143,56 +150,38 @@
   .prompt-body { padding: 1.5rem; }
   .prompt-text { font-size: 0.87rem; line-height: 1.85; color: #c8c4bc; font-family: 'DM Sans', sans-serif; white-space: pre-wrap; }
 
-  /* === MUDANÇA 1 — NEGATIVE PROMPT === */
+  /* NEGATIVE PROMPT — embutido no final */
   .negative-prompt-block { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
-  .negative-prompt-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--danger); text-transform: uppercase; margin-bottom: 0.5rem; opacity: 0.8; }
+  .negative-prompt-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--danger); text-transform: uppercase; margin-bottom: 0.4rem; opacity: 0.8; }
   .negative-prompt-text { font-size: 0.82rem; line-height: 1.7; color: #908c88; font-family: 'DM Sans', sans-serif; }
 
   .actions-bottom { margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
   .btn-copy-all { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
   .btn-copy-all:hover { background: rgba(200,169,110,0.08); }
+  .btn-save-essay { background: transparent; border: 1px solid var(--success); color: var(--success); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
+  .btn-save-essay:hover { background: rgba(92,224,154,0.08); }
   .btn-new { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
   .btn-new:hover { border-color: var(--muted); color: var(--text); }
 
-  /* Botão salvar */
-  .btn-save-essay { background: transparent; border: 1px solid var(--success); color: var(--success); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
-  .btn-save-essay:hover { background: rgba(92,224,154,0.08); }
-
-  .error-box { display: none; background: rgba(224,92,92,0.08); border: 1px solid rgba(224,92,92,0.3); border-radius: 4px; padding: 1.2rem 1.5rem; margin-top: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--danger); }
-  .error-box.visible { display: block; }
-
-  .api-key-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-  .api-key-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
-  .api-key-input { flex: 1; min-width: 200px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.6rem 1rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.8rem; outline: none; transition: border-color 0.2s; }
-  .api-key-input:focus { border-color: var(--accent); }
-  .api-key-hint { font-size: 0.75rem; color: var(--muted); width: 100%; margin-top: 0.3rem; }
-
-  /* === MUDANÇA 5 — CAIXA ANIVERSÁRIO === */
-  .birthday-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
-  .birthday-box-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
-  .birthday-options { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-  .birthday-radio-label { display: flex; align-items: center; gap: 0.4rem; color: var(--text); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.75rem; }
-  .birthday-radio-label input[type="radio"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
-  .birthday-age-wrap { display: none; align-items: center; gap: 0.6rem; margin-top: 0.8rem; }
-  .birthday-age-wrap.visible { display: flex; }
-  .birthday-age-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; }
-  .birthday-age-input { width: 80px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.8rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s; text-align: center; }
-  .birthday-age-input:focus { border-color: var(--accent); }
-
-  /* === MUDANÇA 4 — BIBLIOTECA === */
+  /* BIBLIOTECA */
   .library-section { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border); }
-  .library-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-  .library-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text); }
-  .library-title span { color: var(--accent); font-style: italic; }
-  .library-count { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
-  .library-empty { text-align: center; padding: 3rem 2rem; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; background: var(--surface); border: 1px dashed var(--border); border-radius: 4px; }
-  .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .library-main-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--text); margin-bottom: 2rem; }
+  .library-main-title span { color: var(--accent); font-style: italic; }
+
+  .library-category { margin-bottom: 2.5rem; }
+  .library-category-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
+  .library-category-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
+  .library-category-count { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+
+  .library-empty-cat { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); padding: 1rem 0; opacity: 0.6; }
+
+  .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
   .library-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: border-color 0.25s; }
   .library-card:hover { border-color: rgba(200,169,110,0.4); }
-  .library-card-img { width: 100%; height: 160px; object-fit: cover; display: block; border-bottom: 1px solid var(--border); }
-  .library-card-body { padding: 1rem; }
-  .library-card-date { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 0.3rem; }
-  .library-card-name { font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.8rem; }
+  .library-card-img { width: 100%; height: 150px; object-fit: cover; display: block; border-bottom: 1px solid var(--border); }
+  .library-card-body { padding: 0.9rem; }
+  .library-card-date { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); margin-bottom: 0.3rem; }
+  .library-card-name { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 0.7rem; }
   .library-card-actions { display: flex; gap: 0.5rem; }
   .btn-lib { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.6rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border-radius: 2px; text-align: center; }
   .btn-lib:hover { border-color: var(--accent); color: var(--accent); }
@@ -206,9 +195,9 @@
   @media (max-width: 700px) {
     header { padding: 1.5rem; }
     .container { padding: 2rem 1.2rem; }
-    .preview-section { flex-direction: column; }
-    .preview-img-wrap { flex: none; width: 100%; }
+    .photo-slots { grid-template-columns: 1fr; }
     .library-grid { grid-template-columns: 1fr; }
+    .essay-config { flex-direction: column; }
   }
 </style>
 </head>
@@ -228,47 +217,84 @@
     <span class="api-key-hint">Sua chave Google Gemini — gratuita em aistudio.google.com · Get API Key</span>
   </div>
 
-  <!-- DROP ZONE -->
-  <div class="drop-zone" id="dropZone">
-    <div class="drop-icon">⬡</div>
-    <div class="drop-title">Arraste sua foto de referência aqui</div>
-    <div class="drop-sub" style="margin-top:0.5rem">ou clique para selecionar · JPG, PNG, WEBP</div>
-    <input type="file" id="fileInput" accept="image/*">
-  </div>
+  <!-- DOIS SLOTS DE FOTO -->
+  <div class="photo-slots">
 
-  <!-- PREVIEW -->
-  <div class="preview-section" id="previewSection">
-    <div class="preview-img-wrap">
-      <img id="previewImg" src="" alt="Referência">
-      <div class="img-badge">Referência</div>
-    </div>
-    <div class="preview-info">
-      <h3>Imagem carregada</h3>
-      <p id="imgMeta">—</p>
-
-      <!-- === MUDANÇA 5 — CAIXA ANIVERSÁRIO === -->
-      <div class="birthday-box">
-        <div class="birthday-box-title">◈ Este ensaio é de aniversário?</div>
-        <div class="birthday-options">
-          <label class="birthday-radio-label">
-            <input type="radio" name="birthday" value="nao" checked onchange="toggleBirthday()"> Não
-          </label>
-          <label class="birthday-radio-label">
-            <input type="radio" name="birthday" value="sim" onchange="toggleBirthday()"> Sim
-          </label>
-        </div>
-        <div class="birthday-age-wrap" id="birthdayAgeWrap">
-          <span class="birthday-age-label">Qual a idade?</span>
-          <input type="number" id="birthdayAge" class="birthday-age-input" placeholder="Ex: 30" min="1" max="120" />
+    <!-- SLOT 1: FOTO DE REFERÊNCIA -->
+    <div class="photo-slot" id="slotRef">
+      <span class="photo-slot-label">◈ Foto de Referência</span>
+      <span class="photo-slot-sublabel">Cenário · Luz · Câmera · Ângulo · Pose</span>
+      <div class="photo-drop" id="dropRef" onclick="document.getElementById('fileRef').click()">
+        <div class="photo-drop-icon">⬡</div>
+        <div class="photo-drop-title">Arraste ou clique</div>
+        <div class="photo-drop-sub">JPG · PNG · WEBP</div>
+        <input type="file" id="fileRef" accept="image/*" style="display:none">
+      </div>
+      <div class="photo-preview" id="previewRef">
+        <img id="imgRef" src="" alt="Referência">
+        <div class="photo-preview-info">
+          <span id="metaRef">—</span>
+          <button class="photo-remove" onclick="removePhoto('ref')">✕ Remover</button>
         </div>
       </div>
-      <!-- FIM MUDANÇA 5 -->
-
-      <button class="btn-analyze" id="btnAnalyze" onclick="analyzeImage()">
-        ◈ &nbsp;Analisar e Gerar Prompts
-      </button>
-      <button class="btn-reset" onclick="resetAll()">Trocar foto</button>
     </div>
+
+    <!-- SLOT 2: FOTO DA CLIENTE -->
+    <div class="photo-slot" id="slotClient">
+      <span class="photo-slot-label">◈ Foto da Cliente</span>
+      <span class="photo-slot-sublabel">Rosto · Pele · Cabelo · Características físicas</span>
+      <div class="photo-drop" id="dropClient" onclick="document.getElementById('fileClient').click()">
+        <div class="photo-drop-icon">⬡</div>
+        <div class="photo-drop-title">Arraste ou clique</div>
+        <div class="photo-drop-sub">JPG · PNG · WEBP</div>
+        <input type="file" id="fileClient" accept="image/*" style="display:none">
+      </div>
+      <div class="photo-preview" id="previewClient">
+        <img id="imgClient" src="" alt="Cliente">
+        <div class="photo-preview-info">
+          <span id="metaClient">—</span>
+          <button class="photo-remove" onclick="removePhoto('client')">✕ Remover</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONFIGURAÇÕES DO ENSAIO -->
+  <div class="essay-config">
+
+    <!-- Tipo de ensaio -->
+    <div class="config-group">
+      <span class="config-label">Tipo de ensaio</span>
+      <div class="essay-type-options" id="essayTypeOptions">
+        <label class="type-radio-label active" onclick="selectEssayType('profissional', this)">
+          <input type="radio" name="essayType" value="profissional" checked> Profissional
+        </label>
+        <label class="type-radio-label" onclick="selectEssayType('aniversario', this)">
+          <input type="radio" name="essayType" value="aniversario"> Aniversário
+        </label>
+        <label class="type-radio-label" onclick="selectEssayType('casamento', this)">
+          <input type="radio" name="essayType" value="casamento"> Casamento
+        </label>
+      </div>
+    </div>
+
+    <!-- Campo idade (só aparece em aniversário) -->
+    <div class="config-group">
+      <div class="birthday-age-wrap" id="birthdayAgeWrap">
+        <span class="birthday-age-label">Qual a idade?</span>
+        <input type="number" id="birthdayAge" class="birthday-age-input" placeholder="Ex: 30" min="1" max="120" />
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTÃO ANALISAR -->
+  <div class="analyze-row">
+    <button class="btn-analyze" id="btnAnalyze" onclick="analyzeImage()">
+      ◈ &nbsp;Analisar e Gerar Prompts
+    </button>
+    <button class="btn-reset-all" onclick="resetAll()">↺ &nbsp;Recomeçar</button>
   </div>
 
   <!-- ERROR -->
@@ -277,25 +303,21 @@
   <!-- LOADING -->
   <div class="loading-section" id="loadingSection">
     <div class="loader">
-      <div class="loader-dot"></div>
-      <div class="loader-dot"></div>
-      <div class="loader-dot"></div>
+      <div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div>
     </div>
-    <div class="loading-step" id="loadingStep">Analisando composição visual...</div>
-    <div class="loading-text" id="loadingDetail">Identificando iluminação, enquadramento e estilo</div>
+    <div class="loading-step" id="loadingStep">Analisando foto de referência...</div>
+    <div class="loading-text" id="loadingDetail">Extraindo cenário, luz e composição</div>
   </div>
 
   <!-- RESULTS -->
   <div class="results-section" id="resultsSection">
     <div class="results-header">
-      <div>
-        <div class="results-title">5 Prompts <span>gerados</span></div>
-      </div>
-      <div class="results-count">Ensaio fotográfico · Flow Labs</div>
+      <div class="results-title">5 Prompts <span>gerados</span></div>
+      <div class="results-count" id="resultsCount">Ensaio · Flow Labs</div>
     </div>
 
-    <div class="analysis-box" id="analysisBox">
-      <div class="analysis-label">◈ Análise Técnica da Imagem</div>
+    <div class="analysis-box">
+      <div class="analysis-label">◈ Análise Técnica da Referência</div>
       <div class="analysis-text" id="analysisText"></div>
     </div>
 
@@ -303,19 +325,42 @@
 
     <div class="actions-bottom">
       <button class="btn-copy-all" onclick="copyAll()">⬡ &nbsp;Copiar todos os prompts</button>
-      <!-- === MUDANÇA 4 — BOTÃO SALVAR === -->
       <button class="btn-save-essay" onclick="saveEssay()">◈ &nbsp;Salvar Ensaio</button>
       <button class="btn-new" onclick="resetAll()">↺ &nbsp;Nova imagem</button>
     </div>
   </div>
 
-  <!-- === MUDANÇA 4 — BIBLIOTECA DE ENSAIOS === -->
+  <!-- BIBLIOTECA -->
   <div class="library-section" id="librarySection">
-    <div class="library-header">
-      <div class="library-title">Biblioteca de <span>Ensaios</span></div>
-      <div class="library-count" id="libraryCount"></div>
+    <div class="library-main-title">Biblioteca de <span>Ensaios</span></div>
+
+    <!-- Categoria: Aniversário -->
+    <div class="library-category">
+      <div class="library-category-header">
+        <span class="library-category-title">🎂 Aniversário</span>
+        <span class="library-category-count" id="countAniversario"></span>
+      </div>
+      <div id="gridAniversario"></div>
     </div>
-    <div id="libraryGrid"></div>
+
+    <!-- Categoria: Profissional -->
+    <div class="library-category">
+      <div class="library-category-header">
+        <span class="library-category-title">◈ Profissional</span>
+        <span class="library-category-count" id="countProfissional"></span>
+      </div>
+      <div id="gridProfissional"></div>
+    </div>
+
+    <!-- Categoria: Casamento -->
+    <div class="library-category">
+      <div class="library-category-header">
+        <span class="library-category-title">◇ Casamento</span>
+        <span class="library-category-count" id="countCasamento"></span>
+      </div>
+      <div id="gridCasamento"></div>
+    </div>
+
   </div>
 
 </div>
@@ -329,98 +374,111 @@ const PROMPT_TYPES = [
   { tag: 'Prompt 05', name: 'Variação de Movimento / Expressão' },
 ];
 
-// === MUDANÇA 1 — NEGATIVE PROMPT FIXO ===
-const NEGATIVE_PROMPT = 'low quality, deformed face, extra fingers, plastic skin, over-smoothing, unrealistic lighting, distorted anatomy, AI artifacts, blurred eyes, bad proportions, blurry, out of focus, watermark, text, duplicate, ugly, disfigured';
+const NEGATIVE_PROMPT = 'low quality, deformed face, extra fingers, plastic skin, over-smoothing, unrealistic lighting, distorted anatomy, AI artifacts, blurred eyes, bad proportions, blurry, watermark, text, duplicate, ugly, disfigured';
 
-let currentImageBase64 = null;
-let currentImageType = 'image/jpeg';
-let currentImageDataUrl = null;
+// Estado
+let refBase64 = null, refType = 'image/jpeg', refDataUrl = null;
+let clientBase64 = null, clientType = 'image/jpeg';
+let currentEssayType = 'profissional';
 let allPromptsText = '';
 let lastAnalysisText = '';
 let lastPromptMatches = [];
 
-// DROP ZONE
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
+// === SETUP DROP ZONES ===
+function setupDrop(dropId, fileId, slot) {
+  const drop = document.getElementById(dropId);
+  const input = document.getElementById(fileId);
 
-dropZone.addEventListener('click', () => fileInput.click());
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragging'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragging'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('dragging');
-  const file = e.dataTransfer.files[0];
-  if (file && file.type.startsWith('image/')) loadImage(file);
-});
+  drop.addEventListener('dragover', e => { e.preventDefault(); document.getElementById('slot' + cap(slot)).style.borderColor = 'var(--accent)'; });
+  drop.addEventListener('dragleave', () => { document.getElementById('slot' + cap(slot)).style.borderColor = ''; });
+  drop.addEventListener('drop', e => {
+    e.preventDefault();
+    document.getElementById('slot' + cap(slot)).style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) loadPhoto(file, slot);
+  });
+  input.addEventListener('change', e => { if (e.target.files[0]) loadPhoto(e.target.files[0], slot); });
+}
 
-fileInput.addEventListener('change', e => {
-  if (e.target.files[0]) loadImage(e.target.files[0]);
-});
+function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-function loadImage(file) {
-  currentImageType = file.type || 'image/jpeg';
+setupDrop('dropRef', 'fileRef', 'ref');
+setupDrop('dropClient', 'fileClient', 'client');
+
+function loadPhoto(file, slot) {
   const reader = new FileReader();
   reader.onload = ev => {
     const dataUrl = ev.target.result;
-    currentImageBase64 = dataUrl.split(',')[1];
-    currentImageDataUrl = dataUrl;
-    document.getElementById('previewImg').src = dataUrl;
-    document.getElementById('imgMeta').textContent = `${file.name} · ${(file.size/1024).toFixed(0)} KB`;
-    document.getElementById('previewSection').classList.add('visible');
-    dropZone.style.display = 'none';
-    document.getElementById('resultsSection').classList.remove('visible');
-    document.getElementById('loadingSection').classList.remove('visible');
+    const b64 = dataUrl.split(',')[1];
+    const type = file.type || 'image/jpeg';
+    const meta = `${file.name} · ${(file.size/1024).toFixed(0)} KB`;
+
+    if (slot === 'ref') {
+      refBase64 = b64; refType = type; refDataUrl = dataUrl;
+      document.getElementById('imgRef').src = dataUrl;
+      document.getElementById('metaRef').textContent = meta;
+      document.getElementById('previewRef').classList.add('visible');
+      document.getElementById('dropRef').style.display = 'none';
+      document.getElementById('slotRef').classList.add('has-image');
+    } else {
+      clientBase64 = b64; clientType = type;
+      document.getElementById('imgClient').src = dataUrl;
+      document.getElementById('metaClient').textContent = meta;
+      document.getElementById('previewClient').classList.add('visible');
+      document.getElementById('dropClient').style.display = 'none';
+      document.getElementById('slotClient').classList.add('has-image');
+    }
     hideError();
   };
   reader.readAsDataURL(file);
 }
 
-function resetAll() {
-  currentImageBase64 = null;
-  currentImageDataUrl = null;
-  document.getElementById('previewSection').classList.remove('visible');
-  document.getElementById('resultsSection').classList.remove('visible');
-  document.getElementById('loadingSection').classList.remove('visible');
-  dropZone.style.display = '';
-  fileInput.value = '';
-  document.querySelector('input[name="birthday"][value="nao"]').checked = true;
-  document.getElementById('birthdayAgeWrap').classList.remove('visible');
-  document.getElementById('birthdayAge').value = '';
-  hideError();
-}
-
-function showError(msg) {
-  const box = document.getElementById('errorBox');
-  box.textContent = '⚠ ' + msg;
-  box.classList.add('visible');
-}
-
-function hideError() {
-  document.getElementById('errorBox').classList.remove('visible');
-}
-
-// === MUDANÇA 5 — TOGGLE ANIVERSÁRIO ===
-function toggleBirthday() {
-  const isBirthday = document.querySelector('input[name="birthday"]:checked').value === 'sim';
-  const wrap = document.getElementById('birthdayAgeWrap');
-  if (isBirthday) {
-    wrap.classList.add('visible');
+function removePhoto(slot) {
+  if (slot === 'ref') {
+    refBase64 = null; refDataUrl = null;
+    document.getElementById('previewRef').classList.remove('visible');
+    document.getElementById('dropRef').style.display = '';
+    document.getElementById('fileRef').value = '';
+    document.getElementById('slotRef').classList.remove('has-image');
   } else {
-    wrap.classList.remove('visible');
-    document.getElementById('birthdayAge').value = '';
+    clientBase64 = null;
+    document.getElementById('previewClient').classList.remove('visible');
+    document.getElementById('dropClient').style.display = '';
+    document.getElementById('fileClient').value = '';
+    document.getElementById('slotClient').classList.remove('has-image');
   }
 }
 
+function resetAll() {
+  removePhoto('ref'); removePhoto('client');
+  document.getElementById('resultsSection').classList.remove('visible');
+  document.getElementById('loadingSection').classList.remove('visible');
+  document.getElementById('birthdayAge').value = '';
+  selectEssayType('profissional', document.querySelector('.type-radio-label'));
+  hideError();
+}
+
+function showError(msg) { const b = document.getElementById('errorBox'); b.textContent = '⚠ ' + msg; b.classList.add('visible'); }
+function hideError() { document.getElementById('errorBox').classList.remove('visible'); }
+
+// === TIPO DE ENSAIO ===
+function selectEssayType(type, el) {
+  currentEssayType = type;
+  document.querySelectorAll('.type-radio-label').forEach(l => l.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.getElementById('birthdayAgeWrap').classList.toggle('visible', type === 'aniversario');
+  if (type !== 'aniversario') document.getElementById('birthdayAge').value = '';
+}
+
+// === LOADING ===
 const LOADING_STEPS = [
-  ['Analisando composição visual...', 'Identificando enquadramento, ângulo e lente'],
-  ['Mapeando iluminação...', 'Detectando direção, intensidade e qualidade de luz'],
-  ['Avaliando pose e expressão...', 'Analisando posição corporal e atmosfera'],
-  ['Gerando prompts para Flow Labs...', 'Criando 5 variações detalhadas do ensaio'],
+  ['Analisando foto de referência...', 'Extraindo cenário, luz e composição'],
+  ['Analisando características da cliente...', 'Mapeando rosto, pele e cabelo'],
+  ['Construindo prompts para Flow Labs...', 'Combinando referência com a cliente'],
+  ['Finalizando variações...', 'Criando 5 prompts detalhados'],
 ];
-
 let loadingInterval = null;
-
-function startLoadingAnimation() {
+function startLoading() {
   let i = 0;
   document.getElementById('loadingStep').textContent = LOADING_STEPS[0][0];
   document.getElementById('loadingDetail').textContent = LOADING_STEPS[0][1];
@@ -430,65 +488,82 @@ function startLoadingAnimation() {
     document.getElementById('loadingDetail').textContent = LOADING_STEPS[i][1];
   }, 2200);
 }
+function stopLoading() { if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; } }
 
-function stopLoadingAnimation() {
-  if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
-}
-
+// === ANÁLISE PRINCIPAL ===
 async function analyzeImage() {
-  if (!currentImageBase64) return;
+  if (!refBase64) { showError('Adicione a foto de referência antes de continuar.'); return; }
+  if (!clientBase64) { showError('Adicione a foto da cliente antes de continuar.'); return; }
   hideError();
 
   const apiKey = document.getElementById('apiKeyInput').value.trim();
-  if (!apiKey) {
-    showError('Insira sua chave API do Google Gemini antes de continuar.');
-    return;
-  }
+  if (!apiKey) { showError('Insira sua chave API do Google Gemini antes de continuar.'); return; }
 
-  // === MUDANÇA 5/6 — LER DADOS DE ANIVERSÁRIO ===
-  const isBirthday = document.querySelector('input[name="birthday"]:checked').value === 'sim';
   const birthdayAge = document.getElementById('birthdayAge').value.trim();
-  const birthdayInfo = isBirthday && birthdayAge
-    ? `\n\nIMPORTANTE: Este é um ENSAIO DE ANIVERSÁRIO DE ${birthdayAge} ANOS. Incorpore isso naturalmente em todos os prompts: mencione "ensaio fotográfico de aniversário de ${birthdayAge} anos", inclua elementos de comemoração elegantes (flores, balões sofisticados, detalhes festivos sutis), estilo festivo elegante condizente com a idade, decoração coerente com a celebração. Mantenha o estilo fotográfico profissional editorial.`
-    : '';
+  const isAniversario = currentEssayType === 'aniversario';
+  const isCasamento = currentEssayType === 'casamento';
+
+  // Contexto do tipo de ensaio
+  let essayContext = '';
+  if (isAniversario && birthdayAge) {
+    essayContext = `\n\nTIPO DE ENSAIO: ANIVERSÁRIO DE ${birthdayAge} ANOS. Os prompts devem incluir elementos elegantes de celebração coerentes com a cena da foto de referência (ex: elementos florais, decoração sutil de festa, ambiente comemorativo). Incorpore "ensaio fotográfico de aniversário de ${birthdayAge} anos" naturalmente nos prompts. Mantenha o estilo editorial profissional.`;
+  } else if (isAniversario) {
+    essayContext = `\n\nTIPO DE ENSAIO: ANIVERSÁRIO. Os prompts devem incluir elementos elegantes de celebração coerentes com a cena da foto de referência. Mantenha o estilo editorial profissional.`;
+  } else if (isCasamento) {
+    essayContext = `\n\nTIPO DE ENSAIO: CASAMENTO. Os prompts devem ter estilo romântico e elegante, com elementos que remetem ao casamento (véu, flores brancas, ambiente nupcial, tons suaves). Mantenha o estilo fotográfico editorial profissional.`;
+  } else {
+    essayContext = `\n\nTIPO DE ENSAIO: PROFISSIONAL. Mantenha foco em fotografia editorial profissional, limpa e elegante.`;
+  }
 
   document.getElementById('btnAnalyze').disabled = true;
   document.getElementById('loadingSection').classList.add('visible');
   document.getElementById('resultsSection').classList.remove('visible');
-  startLoadingAnimation();
+  startLoading();
 
-  // === MUDANÇA 2 — SYSTEM PROMPT OTIMIZADO PARA FLOW LABS ===
-  const systemPrompt = `Você é um especialista em fotografia profissional e engenharia de prompts para o Flow Labs. Seus prompts devem ser extremamente detalhados e otimizados para gerar fotografias ultra-realistas, incluindo sempre: descrição fotográfica extremamente detalhada, iluminação profissional de estúdio, especificações de lente e câmera, textura realista da pele com poros visíveis, estilo fotográfico editorial de alto nível, e máxima fidelidade facial. SEMPRE use exatamente as marcações de seção solicitadas, sem modificá-las.`;
+  // === SYSTEM PROMPT OTIMIZADO PARA FLOW LABS ===
+  const systemPrompt = `Você é um especialista em fotografia profissional e engenharia de prompts para o Flow Labs. 
+Você recebe DUAS imagens:
+1. FOTO DE REFERÊNCIA: extraia APENAS cenário, ambiente, fundo, iluminação (direção, intensidade, temperatura de cor, softbox, luz de recorte), ângulo da câmera, distância focal, enquadramento, composição, profundidade de campo, atmosfera e estilo fotográfico. NÃO use as características físicas da pessoa da referência.
+2. FOTO DA CLIENTE: extraia APENAS as características físicas — formato do rosto, cor e formato dos olhos, sobrancelhas, nariz, boca/lábios, mandíbula, tom de pele exato, textura da pele, cor/comprimento/textura do cabelo, roupas e acessórios que ela está usando.
+Os prompts devem combinar o cenário/luz da referência com as características físicas da cliente.
+SEMPRE use exatamente as marcações de seção solicitadas, sem modificá-las.`;
 
-  // === MUDANÇA 3 — COMANDO FIXO DE ROSTO ===
-  const facePreamble = `Crie um retrato profissional ultra-realista de uma mulher. Use exatamente o mesmo rosto das fotos de referência anexadas. Preserve identidade facial, proporções, formato do rosto, olhos e expressão.`;
+  const facePreamble = `Crie um retrato profissional ultra-realista de uma mulher. Use exatamente o mesmo rosto e características físicas da segunda foto (foto da cliente) anexada. Preserve identidade facial, proporções, formato do rosto, olhos e expressão da cliente.`;
 
-  const userPrompt = `Analise esta imagem de referência profundamente e gere 5 prompts detalhados em português para recriar um ensaio fotográfico no Flow Labs.${birthdayInfo}
+  const userPrompt = `Analise as duas imagens enviadas e gere 5 prompts detalhados para Flow Labs.
+IMAGEM 1 = FOTO DE REFERÊNCIA (cenário, luz, câmera, ângulo, composição — NÃO use características físicas desta pessoa)
+IMAGEM 2 = FOTO DA CLIENTE (características físicas, rosto, pele, cabelo — use APENAS estas características)${essayContext}
 
-REGRA ABSOLUTA: Responda APENAS com o conteúdo estruturado abaixo. Use EXATAMENTE estas marcações. Não adicione texto fora das marcações.
+REGRA ABSOLUTA: Responda APENAS com as marcações abaixo. Não adicione texto fora das marcações.
 
 [ANALISE_INICIO]
-Análise técnica completa: cenário/ambiente, pose corporal, enquadramento, ângulo da câmera, tipo de lente e distância focal, iluminação (direção, intensidade, soft/hard light, luz principal, luz de recorte, luz de preenchimento), estilo fotográfico, composição, profundidade de campo, textura de pele, roupas e acessórios, atmosfera. Descreva com máximo detalhe: formato do rosto, cor e formato dos olhos, sobrancelhas, nariz, boca/lábios, mandíbula, cor e textura do cabelo, tom de pele exato.
+REFERÊNCIA — Cenário: [descreva]; Iluminação: [descreva com direção, tipo softbox/natural, temperatura de cor]; Câmera e lente: [descreva]; Ângulo e enquadramento: [descreva]; Composição: [descreva]; Atmosfera: [descreva].
+CLIENTE — Rosto: [formato, olhos com cor exata, sobrancelhas, nariz, lábios]; Tom de pele: [descreva exato]; Textura da pele: [descreva]; Cabelo: [cor, comprimento, textura]; Roupa e acessórios: [descreva].
 [ANALISE_FIM]
 
 [PROMPT1_INICIO]
-Inicie com: "${facePreamble}" — depois continue: RECRIAÇÃO FIEL otimizada para Flow Labs. Inclua: (1) CENÁRIO: ambiente, fundo, superfícies, iluminação ambiente${isBirthday && birthdayAge ? `, decoração de aniversário de ${birthdayAge} anos` : ''}; (2) MODELO: rosto com precisão máxima — formato, olhos com cor exata, sobrancelhas, nariz, lábios, tom de pele exato, textura da pele com poros visíveis; cabelo — cor, comprimento, textura; (3) POSE: posição exata do corpo e membros; (4) ROUPA E ACESSÓRIOS: detalhes exatos; (5) CÂMERA: Canon EOS R5 com lente 85mm f/1.4, ângulo dos olhos; (6) ILUMINAÇÃO: softbox principal 45° esquerda, luz de recorte direita, temperatura de cor 5200K; (7) ESTILO: fotografia editorial hiper-realista, 8K ultra HD, bokeh suave, gradação cinematográfica; (8) FIDELIDADE: face:1.4 likeness preservation, rosto idêntico à referência.
+Inicie EXATAMENTE com: "${facePreamble}" — depois continue com a RECRIAÇÃO FIEL. Combine: (1) CENÁRIO da referência com todos os detalhes de fundo, superfícies e iluminação ambiente; (2) CLIENTE: descreva o rosto com precisão máxima usando as características da foto da cliente — formato do rosto, olhos com cor exata, sobrancelhas, nariz, lábios, tom de pele exato, textura com poros visíveis; cabelo da cliente — cor, comprimento, textura; (3) POSE: extraída da referência; (4) ROUPA: da cliente; (5) CÂMERA: Canon EOS R5 lente 85mm f/1.4, ângulo dos olhos; (6) ILUMINAÇÃO: extraída da referência com detalhes técnicos; (7) ESTILO: fotografia editorial hiper-realista, 8K ultra HD, bokeh suave, gradação cinematográfica; (8) face:1.4 likeness preservation, proporções idênticas à foto da cliente.
+Ao final adicione: --negative ${NEGATIVE_PROMPT}
 [PROMPT1_FIM]
 
 [PROMPT2_INICIO]
-Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE ÂNGULO para Flow Labs. Mesmo cenário e modelo do Prompt 1${isBirthday && birthdayAge ? `, aniversário de ${birthdayAge} anos` : ''}. Altere apenas: câmera a 30° lateral direita, ângulo ligeiramente superior (10cm acima da linha dos olhos). Mantenha detalhes faciais, pele, cabelo, roupa, iluminação. Inclua câmera Canon EOS R5 85mm f/1.4, iluminação e estilo editorial 8K. face:1.4 likeness preservation.
+Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE ÂNGULO. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: câmera a 30° lateral direita, ângulo 10cm acima da linha dos olhos. Canon EOS R5 85mm f/1.4, estilo editorial 8K. face:1.4 likeness preservation.
+Ao final adicione: --negative ${NEGATIVE_PROMPT}
 [PROMPT2_FIM]
 
 [PROMPT3_INICIO]
-Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE POSE para Flow Labs. Mesmo cenário e modelo do Prompt 1${isBirthday && birthdayAge ? `, aniversário de ${birthdayAge} anos` : ''}. Altere apenas: corpo em 3/4, peso na perna direita, ombro esquerdo à frente, braços relaxados, olhar direto. Mantenha detalhes faciais, pele, cabelo, roupa, iluminação. Inclua câmera e estilo editorial 8K. face:1.4 likeness preservation.
+Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE POSE. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: corpo em 3/4, peso na perna direita, ombro esquerdo à frente, braços relaxados, olhar direto. Canon EOS R5 85mm f/1.4, editorial 8K. face:1.4 likeness preservation.
+Ao final adicione: --negative ${NEGATIVE_PROMPT}
 [PROMPT3_FIM]
 
 [PROMPT4_INICIO]
-Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE ENQUADRAMENTO para Flow Labs. Mesmo cenário e modelo do Prompt 1${isBirthday && birthdayAge ? `, aniversário de ${birthdayAge} anos` : ''}. Altere apenas: close-up do rosto e ombros, máximo detalhe da pele, poros, olhos com catchlight, lábios, fios de cabelo individuais. Bokeh extremamente suave. Canon EOS R5 85mm f/1.4, editorial 8K. face:1.4 likeness preservation.
+Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE ENQUADRAMENTO. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: close-up do rosto e ombros, máximo detalhe da pele, poros, olhos com catchlight, lábios, fios de cabelo. Bokeh extremamente suave. Canon EOS R5 85mm f/1.4. face:1.4 likeness preservation.
+Ao final adicione: --negative ${NEGATIVE_PROMPT}
 [PROMPT4_FIM]
 
 [PROMPT5_INICIO]
-Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE MOVIMENTO E EXPRESSÃO para Flow Labs. Mesmo cenário e modelo do Prompt 1. Altere apenas: micro sorriso sutil, olhar desviado 5° para o lado, cabeça com inclinação de 8° para a direita, fio de cabelo solto${isBirthday && birthdayAge ? `, expressão de alegria genuína celebrando ${birthdayAge} anos` : ''}. Momento espontâneo congelado. Canon EOS R5 85mm, iluminação editorial. face:1.4 likeness preservation.
+Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE MOVIMENTO E EXPRESSÃO. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: micro sorriso sutil, olhar desviado 5° para o lado, cabeça inclinada 8° para a direita, fio de cabelo solto no rosto. Momento espontâneo congelado. Canon EOS R5 85mm f/1.4, editorial. face:1.4 likeness preservation.
+Ao final adicione: --negative ${NEGATIVE_PROMPT}
 [PROMPT5_FIM]`;
 
   try {
@@ -501,7 +576,10 @@ Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE MOVIMENTO E EXP
           system_instruction: { parts: [{ text: systemPrompt }] },
           contents: [{
             parts: [
-              { inline_data: { mime_type: currentImageType, data: currentImageBase64 } },
+              { inline_data: { mime_type: refType, data: refBase64 } },
+              { text: 'IMAGEM 1 — FOTO DE REFERÊNCIA (cenário, luz, câmera, composição)' },
+              { inline_data: { mime_type: clientType, data: clientBase64 } },
+              { text: 'IMAGEM 2 — FOTO DA CLIENTE (características físicas, rosto, pele, cabelo)' },
               { text: userPrompt }
             ]
           }],
@@ -521,7 +599,7 @@ Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE MOVIMENTO E EXP
     parseAndRender(fullText);
 
   } catch (err) {
-    stopLoadingAnimation();
+    stopLoading();
     document.getElementById('loadingSection').classList.remove('visible');
     showError('Erro ao processar: ' + err.message);
     document.getElementById('btnAnalyze').disabled = false;
@@ -536,7 +614,7 @@ function extractBetween(text, startTag, endTag) {
 }
 
 function parseAndRender(text) {
-  stopLoadingAnimation();
+  stopLoading();
   document.getElementById('loadingSection').classList.remove('visible');
 
   let analysisText = extractBetween(text, '[ANALISE_INICIO]', '[ANALISE_FIM]');
@@ -549,12 +627,10 @@ function parseAndRender(text) {
   const allTagsFound = analysisText && promptMatches.every(p => p);
   if (!allTagsFound) {
     const sections = text.split(/\n(?=#+\s|##\s|\*{2}[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ]|\d+[\.\)]\s|PROMPT\s*\d|ANÁLISE|RECRIA|VARIA)/i);
-
     if (!analysisText) {
       const aIdx = sections.findIndex(s => /análise|técni/i.test(s.slice(0,60)));
       if (aIdx >= 0) analysisText = sections[aIdx].replace(/^[#*\d\.\)\s]+análise[^\n]*/i, '').trim();
     }
-
     const promptKeywords = ['recria', 'ângulo|angulo', 'pose', 'enquadra', 'movimento|expres'];
     promptKeywords.forEach((kw, idx) => {
       if (!promptMatches[idx]) {
@@ -563,7 +639,6 @@ function parseAndRender(text) {
         if (sIdx >= 0) promptMatches[idx] = sections[sIdx].replace(/^[#*\d\.\)\s—–-]+[^\n]*/i, '').trim();
       }
     });
-
     if (promptMatches.some(p => !p)) {
       const byPrompt = text.split(/(?=PROMPT\s*\d)/i);
       byPrompt.forEach(chunk => {
@@ -586,6 +661,10 @@ function parseAndRender(text) {
   lastAnalysisText = analysisText;
   lastPromptMatches = [...promptMatches];
 
+  // Atualizar label de resultados
+  const typeLabel = { profissional: 'Profissional', aniversario: 'Aniversário', casamento: 'Casamento' };
+  document.getElementById('resultsCount').textContent = `${typeLabel[currentEssayType] || ''} · Flow Labs`;
+
   document.getElementById('analysisText').textContent = analysisText;
 
   const grid = document.getElementById('promptsGrid');
@@ -594,7 +673,7 @@ function parseAndRender(text) {
 
   promptMatches.forEach((promptText, idx) => {
     const type = PROMPT_TYPES[idx];
-    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\nPROMPT:\n${promptText}\n\nNEGATIVE PROMPT:\n${NEGATIVE_PROMPT}\n\n\n`;
+    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\n${promptText}\n\n\n`;
 
     const card = document.createElement('div');
     card.className = 'prompt-card';
@@ -607,22 +686,12 @@ function parseAndRender(text) {
             <div class="prompt-name">${type.name}</div>
           </div>
         </div>
-        <div class="prompt-header-btns">
-          <button class="btn-copy" data-idx="${idx}" data-type="prompt">
-            <span>⬡</span> <span class="copy-label">Copiar Prompt</span>
-          </button>
-          <button class="btn-copy" data-idx="${idx}" data-type="negative">
-            <span>⊘</span> <span class="copy-label">Neg. Prompt</span>
-          </button>
-        </div>
+        <button class="btn-copy" data-idx="${idx}">
+          <span>⬡</span> <span class="copy-label">Copiar</span>
+        </button>
       </div>
       <div class="prompt-body">
         <div class="prompt-text" id="promptText${idx}">${escapeHtml(promptText)}</div>
-        <!-- === MUDANÇA 1 — NEGATIVE PROMPT === -->
-        <div class="negative-prompt-block">
-          <div class="negative-prompt-label">⊘ Negative Prompt</div>
-          <div class="negative-prompt-text">${escapeHtml(NEGATIVE_PROMPT)}</div>
-        </div>
       </div>
     `;
     grid.appendChild(card);
@@ -641,9 +710,9 @@ document.addEventListener('click', function(e) {
   const btn = e.target.closest('.btn-copy[data-idx]');
   if (!btn) return;
   const idx = btn.getAttribute('data-idx');
-  const type = btn.getAttribute('data-type');
-  let textToCopy = type === 'negative' ? NEGATIVE_PROMPT : (document.getElementById('promptText' + idx)?.textContent || '');
-
+  const el = document.getElementById('promptText' + idx);
+  if (!el) return;
+  const textToCopy = el.textContent;
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(textToCopy).then(() => flashCopied(btn)).catch(() => fallbackCopy(textToCopy, btn));
   } else {
@@ -685,41 +754,50 @@ function copyAll() {
 }
 
 // ============================================================
-// === MUDANÇA 4 — BIBLIOTECA DE ENSAIOS (localStorage) ===
+// BIBLIOTECA — separada por categoria, salva só foto de referência
 // ============================================================
 
 function getLibrary() {
-  try { return JSON.parse(localStorage.getItem('lensai_library') || '[]'); } catch { return []; }
+  try { return JSON.parse(localStorage.getItem('lensai_library_v2') || '[]'); } catch { return []; }
 }
 
-function saveLibrary(data) {
-  localStorage.setItem('lensai_library', JSON.stringify(data));
+function saveLibraryData(data) {
+  localStorage.setItem('lensai_library_v2', JSON.stringify(data));
 }
 
 function saveEssay() {
-  if (!lastPromptMatches.length || !currentImageDataUrl) {
+  if (!lastPromptMatches.length || !refDataUrl) {
     showError('Gere os prompts antes de salvar o ensaio.');
     return;
   }
 
-  const isBirthday = document.querySelector('input[name="birthday"]:checked').value === 'sim';
   const birthdayAge = document.getElementById('birthdayAge').value.trim();
-  const label = isBirthday && birthdayAge
-    ? `Aniversário ${birthdayAge} anos — ${new Date().toLocaleDateString('pt-BR')}`
-    : `Ensaio — ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'})}`;
+  let label = '';
+  if (currentEssayType === 'aniversario' && birthdayAge) {
+    label = `Aniversário ${birthdayAge} anos`;
+  } else if (currentEssayType === 'aniversario') {
+    label = 'Aniversário';
+  } else if (currentEssayType === 'casamento') {
+    label = 'Casamento';
+  } else {
+    label = 'Profissional';
+  }
+
+  label += ` — ${new Date().toLocaleDateString('pt-BR')}`;
 
   const essay = {
     id: Date.now(),
     date: new Date().toISOString(),
     label,
-    image: currentImageDataUrl,
+    category: currentEssayType,
+    image: refDataUrl, // salva APENAS foto de referência
     analysis: lastAnalysisText,
     prompts: lastPromptMatches,
   };
 
   const library = getLibrary();
   library.unshift(essay);
-  saveLibrary(library);
+  saveLibraryData(library);
   renderLibrary();
 
   const btn = document.querySelector('.btn-save-essay');
@@ -731,7 +809,7 @@ function saveEssay() {
 
 function deleteEssay(id) {
   const library = getLibrary().filter(e => e.id !== id);
-  saveLibrary(library);
+  saveLibraryData(library);
   renderLibrary();
 }
 
@@ -741,14 +819,10 @@ function openEssay(id) {
 
   lastAnalysisText = essay.analysis;
   lastPromptMatches = essay.prompts;
-  currentImageDataUrl = essay.image;
-  currentImageBase64 = essay.image.split(',')[1];
-
-  document.getElementById('previewImg').src = essay.image;
-  document.getElementById('imgMeta').textContent = essay.label;
-  document.getElementById('previewSection').classList.add('visible');
-  dropZone.style.display = 'none';
   document.getElementById('analysisText').textContent = essay.analysis;
+
+  const typeLabel = { profissional: 'Profissional', aniversario: 'Aniversário', casamento: 'Casamento' };
+  document.getElementById('resultsCount').textContent = `${typeLabel[essay.category] || ''} · Flow Labs`;
 
   const grid = document.getElementById('promptsGrid');
   grid.innerHTML = '';
@@ -756,7 +830,7 @@ function openEssay(id) {
 
   essay.prompts.forEach((promptText, idx) => {
     const type = PROMPT_TYPES[idx];
-    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\nPROMPT:\n${promptText}\n\nNEGATIVE PROMPT:\n${NEGATIVE_PROMPT}\n\n\n`;
+    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\n${promptText}\n\n\n`;
 
     const card = document.createElement('div');
     card.className = 'prompt-card';
@@ -769,17 +843,12 @@ function openEssay(id) {
             <div class="prompt-name">${type.name}</div>
           </div>
         </div>
-        <div class="prompt-header-btns">
-          <button class="btn-copy" data-idx="${idx}" data-type="prompt"><span>⬡</span> <span class="copy-label">Copiar Prompt</span></button>
-          <button class="btn-copy" data-idx="${idx}" data-type="negative"><span>⊘</span> <span class="copy-label">Neg. Prompt</span></button>
-        </div>
+        <button class="btn-copy" data-idx="${idx}">
+          <span>⬡</span> <span class="copy-label">Copiar</span>
+        </button>
       </div>
       <div class="prompt-body">
         <div class="prompt-text" id="promptText${idx}">${escapeHtml(promptText)}</div>
-        <div class="negative-prompt-block">
-          <div class="negative-prompt-label">⊘ Negative Prompt</div>
-          <div class="negative-prompt-text">${escapeHtml(NEGATIVE_PROMPT)}</div>
-        </div>
       </div>
     `;
     grid.appendChild(card);
@@ -791,42 +860,46 @@ function openEssay(id) {
 
 function renderLibrary() {
   const library = getLibrary();
-  const grid = document.getElementById('libraryGrid');
-  const count = document.getElementById('libraryCount');
+  const categories = ['aniversario', 'profissional', 'casamento'];
 
-  count.textContent = library.length > 0 ? `${library.length} ensaio${library.length > 1 ? 's' : ''} salvo${library.length > 1 ? 's' : ''}` : '';
+  categories.forEach(cat => {
+    const items = library.filter(e => e.category === cat);
+    const countEl = document.getElementById('count' + cap(cat));
+    const gridEl = document.getElementById('grid' + cap(cat));
 
-  if (library.length === 0) {
-    grid.innerHTML = '<div class="library-empty">Nenhum ensaio salvo ainda · Clique em "Salvar Ensaio" após gerar os prompts</div>';
-    return;
-  }
+    countEl.textContent = items.length > 0 ? `${items.length} ensaio${items.length > 1 ? 's' : ''}` : '';
 
-  const libGrid = document.createElement('div');
-  libGrid.className = 'library-grid';
+    if (items.length === 0) {
+      gridEl.innerHTML = `<div class="library-empty-cat">Nenhum ensaio salvo nesta categoria ainda.</div>`;
+      return;
+    }
 
-  library.forEach(essay => {
-    const card = document.createElement('div');
-    card.className = 'library-card';
-    const dateStr = new Date(essay.date).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
-    card.innerHTML = `
-      <img class="library-card-img" src="${essay.image}" alt="Ensaio" />
-      <div class="library-card-body">
-        <div class="library-card-date">${dateStr}</div>
-        <div class="library-card-name">${escapeHtml(essay.label)}</div>
-        <div class="library-card-actions">
-          <button class="btn-lib" onclick="openEssay(${essay.id})">↩ Abrir</button>
-          <button class="btn-lib danger" onclick="deleteEssay(${essay.id})">✕ Excluir</button>
+    const libGrid = document.createElement('div');
+    libGrid.className = 'library-grid';
+
+    items.forEach(essay => {
+      const card = document.createElement('div');
+      card.className = 'library-card';
+      const dateStr = new Date(essay.date).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+      card.innerHTML = `
+        <img class="library-card-img" src="${essay.image}" alt="Referência" />
+        <div class="library-card-body">
+          <div class="library-card-date">${dateStr}</div>
+          <div class="library-card-name">${escapeHtml(essay.label)}</div>
+          <div class="library-card-actions">
+            <button class="btn-lib" onclick="openEssay(${essay.id})">↩ Abrir</button>
+            <button class="btn-lib danger" onclick="deleteEssay(${essay.id})">✕ Excluir</button>
+          </div>
         </div>
-      </div>
-    `;
-    libGrid.appendChild(card);
-  });
+      `;
+      libGrid.appendChild(card);
+    });
 
-  grid.innerHTML = '';
-  grid.appendChild(libGrid);
+    gridEl.innerHTML = '';
+    gridEl.appendChild(libGrid);
+  });
 }
 
-// Inicializar biblioteca ao carregar
 renderLibrary();
 </script>
 </body>
