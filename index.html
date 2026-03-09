@@ -403,7 +403,7 @@ function removePhoto(slot) {
 }
 
 function resetAll() {
-  removePhoto('ref'); removePhoto('client');
+  removePhoto('ref'); // mantém foto da cliente
   document.getElementById('resultsSection').classList.remove('visible');
   document.getElementById('loadingSection').classList.remove('visible');
   document.getElementById('birthdayAge').value = '';
