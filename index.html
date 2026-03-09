@@ -367,7 +367,40 @@
 
 </div>
 
-<script>
+<script type="module">
+// ─────────────────────────────────────────────
+// FIREBASE
+// ─────────────────────────────────────────────
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCb1x3HTustVswsoZDWEN1Cr_CTumbrmPk",
+  authDomain: "biblioteca-extrator-de-prompts.firebaseapp.com",
+  projectId: "biblioteca-extrator-de-prompts",
+  storageBucket: "biblioteca-extrator-de-prompts.firebasestorage.app",
+  messagingSenderId: "158106477212",
+  appId: "1:158106477212:web:e9eeffffc38990af4c8359"
+};
+
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
+
+// Gera um ID de usuário baseado na chave Gemini (hash simples)
+async function getUserId() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) return null;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(key);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 24);
+}
+
+function getEssaysCollection(userId) {
+  return collection(db, 'users', userId, 'essays');
+}
+
 // ─────────────────────────────────────────────
 // CONFIGURAÇÕES
 // ─────────────────────────────────────────────
@@ -416,6 +449,8 @@ function saveApiKey() {
     localStorage.removeItem('lensai_apikey');
     document.getElementById('apiKeySaved').classList.remove('visible');
   }
+  // Recarrega biblioteca com a nova chave
+  renderLibrary();
 }
 
 function loadApiKey() {
@@ -732,15 +767,17 @@ document.addEventListener('click', function(e) {
   // Copiar todos os genéricos (biblioteca)
   const btnCopyAll = e.target.closest('.lib-copy-all-generic[data-copy-essay-id]');
   if (btnCopyAll) {
-    const essayId = parseInt(btnCopyAll.getAttribute('data-copy-essay-id'));
-    const essay = getLibrary().find(en => en.id === essayId);
-    if (!essay || !essay.genericPrompts) return;
-    const GENERIC_NAMES = ['Recriação Fiel', 'Variação de Ângulo', 'Variação de Pose', 'Variação de Enquadramento', 'Variação de Movimento / Expressão'];
-    const allText = essay.genericPrompts.map((p, i) => `=== ${GENERIC_NAMES[i].toUpperCase()} ===\n\n${p}`).join('\n\n\n');
+    const essayId = btnCopyAll.getAttribute('data-copy-essay-id');
     const orig = btnCopyAll.textContent;
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(allText).then(() => { btnCopyAll.textContent = '✓ Copiados!'; setTimeout(() => { btnCopyAll.textContent = orig; }, 2500); }).catch(() => {});
-    }
+    getLibrary().then(lib => {
+      const essay = lib.find(en => String(en.id) === String(essayId));
+      if (!essay || !essay.genericPrompts) return;
+      const GENERIC_NAMES = ['Recriação Fiel', 'Variação de Ângulo', 'Variação de Pose', 'Variação de Enquadramento', 'Variação de Movimento / Expressão'];
+      const allText = essay.genericPrompts.map((p, i) => `=== ${GENERIC_NAMES[i].toUpperCase()} ===\n\n${p}`).join('\n\n\n');
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(allText).then(() => { btnCopyAll.textContent = '✓ Copiados!'; setTimeout(() => { btnCopyAll.textContent = orig; }, 2500); }).catch(() => {});
+      }
+    });
     return;
   }
   // Copiar prompt personalizado (tela de geração)
@@ -790,10 +827,33 @@ function copyAll() {
 }
 
 // ─────────────────────────────────────────────
-// BIBLIOTECA
+// BIBLIOTECA — FIRESTORE
 // ─────────────────────────────────────────────
-function getLibrary() { try { return JSON.parse(localStorage.getItem('lensai_lib_v3') || '[]'); } catch { return []; } }
-function saveLibraryData(d) { localStorage.setItem('lensai_lib_v3', JSON.stringify(d)); }
+async function getLibrary() {
+  try {
+    const userId = await getUserId();
+    if (!userId) return [];
+    const q = query(getEssaysCollection(userId), orderBy('date', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch(e) {
+    console.error('Erro ao carregar biblioteca:', e);
+    return [];
+  }
+}
+
+async function saveLibraryData(essay) {
+  const userId = await getUserId();
+  if (!userId) return;
+  const ref = doc(db, 'users', userId, 'essays', String(essay.id));
+  await setDoc(ref, essay);
+}
+
+async function deleteEssayFromDb(id) {
+  const userId = await getUserId();
+  if (!userId) return;
+  await deleteDoc(doc(db, 'users', userId, 'essays', String(id)));
+}
 
 async function saveEssay() {
   if (!lastPromptMatches.length || !refDataUrl) { showError('Gere os prompts antes de salvar o ensaio.'); return; }
@@ -832,9 +892,9 @@ async function saveEssay() {
     prompts: lastPromptMatches,
     genericPrompts: genericPrompts,
   };
-  const lib = getLibrary(); lib.unshift(essay); saveLibraryData(lib);
+  await saveLibraryData(essay);
   lastGenericPrompts = genericPrompts;
-  renderLibrary();
+  await renderLibrary();
 
   const orig = btn.textContent; btn.textContent = '✓ Ensaio salvo!';
   setTimeout(() => { btn.textContent = orig; }, 2000);
@@ -921,14 +981,20 @@ Ultra-realistic photo, 8K resolution, professional studio portrait setup. [Same 
   return prompts;
 }
 
-function deleteEssay(id) { saveLibraryData(getLibrary().filter(e => e.id !== id)); renderLibrary(); }
+async function deleteEssay(id) {
+  await deleteEssayFromDb(id);
+  await renderLibrary();
+}
 
-function openEssay(id) {
+async function openEssay(id) {
   currentOpenEssayId = id;
-  const essay = getLibrary().find(e => e.id === id);
-  if (!essay) return;
-
   const content = document.getElementById('libraryContent');
+  content.innerHTML = `<div class="library-empty">Carregando ensaio...</div>`;
+
+  const library = await getLibrary();
+  const essay = library.find(e => String(e.id) === String(id));
+  if (!essay) { await renderLibrary(); return; }
+
   const dateStr = new Date(essay.date).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
   const typeInfo = ESSAY_TYPES[essay.category] || ESSAY_TYPES.profissional;
 
@@ -974,10 +1040,14 @@ function openEssay(id) {
 }
 
 
-function renderLibrary() {
-  const library = getLibrary();
+async function renderLibrary() {
   const selector = document.getElementById('libCatSelector');
   const content = document.getElementById('libraryContent');
+
+  // Mostrar loading
+  content.innerHTML = `<div class="library-empty">Carregando biblioteca...</div>`;
+
+  const library = await getLibrary();
 
   // Montar botões de categoria
   selector.innerHTML = '';
@@ -1012,6 +1082,23 @@ function renderLibrary() {
 // ─────────────────────────────────────────────
 loadApiKey();
 renderLibrary();
+
+// Recarrega a biblioteca quando a chave API muda
+document.getElementById('apiKeyInput').addEventListener('change', () => {
+  renderLibrary();
+});
+
+// Expõe funções ao escopo global (necessário para onclick no HTML com type="module")
+window.saveApiKey     = saveApiKey;
+window.removePhoto    = removePhoto;
+window.selectType     = selectType;
+window.analyzeImage   = analyzeImage;
+window.resetAll       = resetAll;
+window.copyAll        = copyAll;
+window.saveEssay      = saveEssay;
+window.openEssay      = openEssay;
+window.deleteEssay    = deleteEssay;
+window.renderLibrary  = renderLibrary;
 </script>
 </body>
 </html>
