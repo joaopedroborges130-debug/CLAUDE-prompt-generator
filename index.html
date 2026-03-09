@@ -521,49 +521,73 @@ async function analyzeImage() {
   startLoading();
 
   // === SYSTEM PROMPT OTIMIZADO PARA FLOW LABS ===
-  const systemPrompt = `Você é um especialista em fotografia profissional e engenharia de prompts para o Flow Labs. 
-Você recebe DUAS imagens:
-1. FOTO DE REFERÊNCIA: extraia APENAS cenário, ambiente, fundo, iluminação (direção, intensidade, temperatura de cor, softbox, luz de recorte), ângulo da câmera, distância focal, enquadramento, composição, profundidade de campo, atmosfera e estilo fotográfico. NÃO use as características físicas da pessoa da referência.
-2. FOTO DA CLIENTE: extraia APENAS as características físicas — formato do rosto, cor e formato dos olhos, sobrancelhas, nariz, boca/lábios, mandíbula, tom de pele exato, textura da pele, cor/comprimento/textura do cabelo, roupas e acessórios que ela está usando.
-Os prompts devem combinar o cenário/luz da referência com as características físicas da cliente.
+  const systemPrompt = `Você é um especialista em fotografia profissional e engenharia de prompts para o Flow Labs.
+Você recebe DUAS imagens com funções COMPLETAMENTE DIFERENTES:
+
+IMAGEM 1 — FOTO DE REFERÊNCIA: extraia e use TUDO desta imagem EXCETO o rosto e características físicas da pessoa.
+Use da referência: cenário, ambiente, fundo, iluminação (direção, intensidade, temperatura de cor, softbox, recorte), ângulo da câmera, distância focal, enquadramento, composição, profundidade de campo, atmosfera, estilo fotográfico, POSE CORPORAL EXATA, ROUPA EXATA, ACESSÓRIOS EXATOS.
+
+IMAGEM 2 — FOTO DA CLIENTE: extraia e use APENAS as características físicas do rosto e cabelo.
+Use da cliente: formato do rosto, cor e formato dos olhos, sobrancelhas, nariz, boca/lábios, mandíbula, tom de pele exato, textura da pele, cor/comprimento/textura do cabelo.
+NÃO use roupa, pose ou cenário da foto da cliente.
+
+REGRA DE OURO: A modelo nos prompts usa o ROSTO DA CLIENTE com a ROUPA, POSE e CENÁRIO DA REFERÊNCIA.
 SEMPRE use exatamente as marcações de seção solicitadas, sem modificá-las.`;
 
-  const facePreamble = `Crie um retrato profissional ultra-realista de uma mulher. Use exatamente o mesmo rosto e características físicas da segunda foto (foto da cliente) anexada. Preserve identidade facial, proporções, formato do rosto, olhos e expressão da cliente.`;
+  const facePreamble = `Crie um retrato profissional ultra-realista de uma mulher. Transplante o rosto e características físicas da segunda foto (cliente) para o corpo e cenário da primeira foto (referência). O rosto é da cliente, tudo o mais é idêntico à referência.`;
 
-  const userPrompt = `Analise as duas imagens enviadas e gere 5 prompts detalhados para Flow Labs.
-IMAGEM 1 = FOTO DE REFERÊNCIA (cenário, luz, câmera, ângulo, composição — NÃO use características físicas desta pessoa)
-IMAGEM 2 = FOTO DA CLIENTE (características físicas, rosto, pele, cabelo — use APENAS estas características)${essayContext}
+  const userPrompt = `Analise as duas imagens e gere 5 prompts detalhados para Flow Labs.
+IMAGEM 1 = REFERÊNCIA → cenário, iluminação, pose, roupa, acessórios, ângulo, câmera (ignore o rosto desta pessoa)
+IMAGEM 2 = CLIENTE → apenas rosto, pele e cabelo (ignore roupa e pose desta pessoa)${essayContext}
 
-REGRA ABSOLUTA: Responda APENAS com as marcações abaixo. Não adicione texto fora das marcações.
+REGRA ABSOLUTA: O resultado final é a CLIENTE com a ROUPA e POSE da REFERÊNCIA no CENÁRIO da REFERÊNCIA.
+Responda APENAS com as marcações abaixo. Não adicione texto fora das marcações.
 
 [ANALISE_INICIO]
-REFERÊNCIA — Cenário: [descreva]; Iluminação: [descreva com direção, tipo softbox/natural, temperatura de cor]; Câmera e lente: [descreva]; Ângulo e enquadramento: [descreva]; Composição: [descreva]; Atmosfera: [descreva].
-CLIENTE — Rosto: [formato, olhos com cor exata, sobrancelhas, nariz, lábios]; Tom de pele: [descreva exato]; Textura da pele: [descreva]; Cabelo: [cor, comprimento, textura]; Roupa e acessórios: [descreva].
+REFERÊNCIA — Cenário: [descreva detalhado]; Iluminação: [direção, tipo, temperatura de cor, softbox, recorte]; Câmera: [lente, ângulo, enquadramento]; Pose corporal: [posição exata do corpo, membros, direção do olhar]; Roupa e acessórios: [descreva com máximo detalhe cores, tecido, corte]; Atmosfera: [descreva].
+CLIENTE — Rosto: [formato, olhos com cor exata, sobrancelhas, nariz, lábios, mandíbula]; Tom de pele: [exato]; Textura da pele: [descreva]; Cabelo: [cor exata, comprimento, textura, como está posicionado].
 [ANALISE_FIM]
 
 [PROMPT1_INICIO]
-Inicie EXATAMENTE com: "${facePreamble}" — depois continue com a RECRIAÇÃO FIEL. Combine: (1) CENÁRIO da referência com todos os detalhes de fundo, superfícies e iluminação ambiente; (2) CLIENTE: descreva o rosto com precisão máxima usando as características da foto da cliente — formato do rosto, olhos com cor exata, sobrancelhas, nariz, lábios, tom de pele exato, textura com poros visíveis; cabelo da cliente — cor, comprimento, textura; (3) POSE: extraída da referência; (4) ROUPA: da cliente; (5) CÂMERA: Canon EOS R5 lente 85mm f/1.4, ângulo dos olhos; (6) ILUMINAÇÃO: extraída da referência com detalhes técnicos; (7) ESTILO: fotografia editorial hiper-realista, 8K ultra HD, bokeh suave, gradação cinematográfica; (8) face:1.4 likeness preservation, proporções idênticas à foto da cliente.
-Ao final adicione: --negative ${NEGATIVE_PROMPT}
+Inicie EXATAMENTE com: "${facePreamble}" — RECRIAÇÃO FIEL para Flow Labs:
+(1) CENÁRIO: [copie exatamente da referência — fundo, superfícies, iluminação ambiente];
+(2) ROSTO DA CLIENTE: formato do rosto, olhos com cor exata, sobrancelhas, nariz, lábios, tom de pele exato, textura com poros visíveis — tudo da foto da cliente;
+(3) CABELO DA CLIENTE: cor exata, comprimento, textura — da foto da cliente;
+(4) POSE: [copie exatamente da referência — posição do corpo, membros, direção do olhar];
+(5) ROUPA E ACESSÓRIOS: [copie exatamente da referência — cores, tecido, corte, todos os detalhes];
+(6) CÂMERA: Canon EOS R5 lente 85mm f/1.4, [ângulo da referência];
+(7) ILUMINAÇÃO: [copie exatamente da referência com todos detalhes técnicos];
+(8) ESTILO: fotografia editorial hiper-realista, 8K ultra HD, bokeh suave, gradação cinematográfica;
+(9) face:1.4 likeness preservation, rosto e características físicas idênticos à foto da cliente.
+--negative ${NEGATIVE_PROMPT}
 [PROMPT1_FIM]
 
 [PROMPT2_INICIO]
-Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE ÂNGULO. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: câmera a 30° lateral direita, ângulo 10cm acima da linha dos olhos. Canon EOS R5 85mm f/1.4, estilo editorial 8K. face:1.4 likeness preservation.
-Ao final adicione: --negative ${NEGATIVE_PROMPT}
+Inicie EXATAMENTE com: "${facePreamble}" — VARIAÇÃO DE ÂNGULO para Flow Labs:
+Mantenha TUDO da referência: cenário, iluminação, pose, roupa e acessórios exatos.
+Rosto e cabelo idênticos à cliente. Altere apenas: câmera a 30° lateral direita, ângulo 10cm acima da linha dos olhos. Canon EOS R5 85mm f/1.4, editorial 8K. face:1.4 likeness preservation.
+--negative ${NEGATIVE_PROMPT}
 [PROMPT2_FIM]
 
 [PROMPT3_INICIO]
-Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE POSE. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: corpo em 3/4, peso na perna direita, ombro esquerdo à frente, braços relaxados, olhar direto. Canon EOS R5 85mm f/1.4, editorial 8K. face:1.4 likeness preservation.
-Ao final adicione: --negative ${NEGATIVE_PROMPT}
+Inicie EXATAMENTE com: "${facePreamble}" — VARIAÇÃO DE POSE para Flow Labs:
+Mantenha TUDO da referência: cenário, iluminação, roupa e acessórios exatos.
+Rosto e cabelo idênticos à cliente. Altere apenas: corpo em 3/4, peso na perna direita, ombro esquerdo à frente, braços relaxados, olhar direto. Mesma roupa da referência. Canon EOS R5 85mm f/1.4, editorial 8K. face:1.4 likeness preservation.
+--negative ${NEGATIVE_PROMPT}
 [PROMPT3_FIM]
 
 [PROMPT4_INICIO]
-Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE ENQUADRAMENTO. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: close-up do rosto e ombros, máximo detalhe da pele, poros, olhos com catchlight, lábios, fios de cabelo. Bokeh extremamente suave. Canon EOS R5 85mm f/1.4. face:1.4 likeness preservation.
-Ao final adicione: --negative ${NEGATIVE_PROMPT}
+Inicie EXATAMENTE com: "${facePreamble}" — VARIAÇÃO DE ENQUADRAMENTO para Flow Labs:
+Mantenha cenário, iluminação e roupa da referência. Rosto e cabelo idênticos à cliente.
+Altere apenas: close-up do rosto e ombros, máximo detalhe da pele, poros, olhos com catchlight, lábios, fios de cabelo. Bokeh extremamente suave. Canon EOS R5 85mm f/1.4. face:1.4 likeness preservation.
+--negative ${NEGATIVE_PROMPT}
 [PROMPT4_FIM]
 
 [PROMPT5_INICIO]
-Inicie EXATAMENTE com: "${facePreamble}" — depois continue com VARIAÇÃO DE MOVIMENTO E EXPRESSÃO. Mesmos cenário e iluminação da referência. Características físicas idênticas à cliente. Altere apenas: micro sorriso sutil, olhar desviado 5° para o lado, cabeça inclinada 8° para a direita, fio de cabelo solto no rosto. Momento espontâneo congelado. Canon EOS R5 85mm f/1.4, editorial. face:1.4 likeness preservation.
-Ao final adicione: --negative ${NEGATIVE_PROMPT}
+Inicie EXATAMENTE com: "${facePreamble}" — VARIAÇÃO DE MOVIMENTO E EXPRESSÃO para Flow Labs:
+Mantenha cenário, iluminação, pose base e roupa da referência. Rosto e cabelo idênticos à cliente.
+Altere apenas: micro sorriso sutil, olhar desviado 5° para o lado, cabeça inclinada 8° para a direita, fio de cabelo solto. Momento espontâneo congelado. Canon EOS R5 85mm f/1.4, editorial. face:1.4 likeness preservation.
+--negative ${NEGATIVE_PROMPT}
 [PROMPT5_FIM]`;
 
   try {
