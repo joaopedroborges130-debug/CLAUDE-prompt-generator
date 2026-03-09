@@ -223,6 +223,14 @@
     <span class="api-key-hint">Google Gemini — gratuita em aistudio.google.com · Salva automaticamente no seu navegador</span>
   </div>
 
+  <!-- CÓDIGO DE EQUIPE -->
+  <div class="api-key-box" style="margin-bottom: 1.5rem;">
+    <span class="api-key-label">◈ Código da Equipe</span>
+    <input type="text" id="teamCodeInput" class="api-key-input" placeholder="Ex: estudio-lens-2024" autocomplete="off" oninput="saveTeamCode()" />
+    <span class="api-key-saved" id="teamCodeSaved">✓ código salvo</span>
+    <span class="api-key-hint">Todos que usarem o mesmo código compartilham a mesma biblioteca · Salvo automaticamente</span>
+  </div>
+
   <!-- DOIS SLOTS DE FOTO -->
   <div class="photo-slots">
     <div class="photo-slot" id="slotRef">
@@ -386,12 +394,14 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-// Gera um ID de usuário baseado na chave Gemini (hash simples)
+// Gera um ID baseado no código de equipe (se preenchido) ou na chave Gemini
 async function getUserId() {
-  const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) return null;
+  const teamCode = document.getElementById('teamCodeInput').value.trim();
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  const identifier = teamCode || apiKey;
+  if (!identifier) return null;
   const encoder = new TextEncoder();
-  const data = encoder.encode(key);
+  const data = encoder.encode(identifier);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('').substring(0, 24);
@@ -449,7 +459,20 @@ function saveApiKey() {
     localStorage.removeItem('lensai_apikey');
     document.getElementById('apiKeySaved').classList.remove('visible');
   }
-  // Recarrega biblioteca com a nova chave
+  // Só recarrega biblioteca se não houver código de equipe (pois aí a chave é o identificador)
+  const teamCode = document.getElementById('teamCodeInput').value.trim();
+  if (!teamCode) renderLibrary();
+}
+
+function saveTeamCode() {
+  const val = document.getElementById('teamCodeInput').value.trim();
+  if (val) {
+    localStorage.setItem('lensai_teamcode', val);
+    document.getElementById('teamCodeSaved').classList.add('visible');
+  } else {
+    localStorage.removeItem('lensai_teamcode');
+    document.getElementById('teamCodeSaved').classList.remove('visible');
+  }
   renderLibrary();
 }
 
@@ -458,6 +481,14 @@ function loadApiKey() {
   if (saved) {
     document.getElementById('apiKeyInput').value = saved;
     document.getElementById('apiKeySaved').classList.add('visible');
+  }
+}
+
+function loadTeamCode() {
+  const saved = localStorage.getItem('lensai_teamcode');
+  if (saved) {
+    document.getElementById('teamCodeInput').value = saved;
+    document.getElementById('teamCodeSaved').classList.add('visible');
   }
 }
 
@@ -1081,15 +1112,18 @@ async function renderLibrary() {
 // INICIALIZAÇÃO
 // ─────────────────────────────────────────────
 loadApiKey();
+loadTeamCode();
 renderLibrary();
 
-// Recarrega a biblioteca quando a chave API muda
+// Recarrega a biblioteca quando a chave API muda (só se não tiver código de equipe)
 document.getElementById('apiKeyInput').addEventListener('change', () => {
-  renderLibrary();
+  const teamCode = document.getElementById('teamCodeInput').value.trim();
+  if (!teamCode) renderLibrary();
 });
 
 // Expõe funções ao escopo global (necessário para onclick no HTML com type="module")
 window.saveApiKey     = saveApiKey;
+window.saveTeamCode   = saveTeamCode;
 window.removePhoto    = removePhoto;
 window.selectType     = selectType;
 window.analyzeImage   = analyzeImage;
