@@ -30,7 +30,6 @@
     overflow-x: hidden;
   }
 
-  /* Grain overlay */
   body::before {
     content: '';
     position: fixed;
@@ -49,35 +48,12 @@
     gap: 1.5rem;
   }
 
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--accent);
-  }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; color: var(--accent); }
+  .logo span { color: var(--text); font-style: italic; font-weight: 400; }
+  .tagline { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
 
-  .logo span {
-    color: var(--text);
-    font-style: italic;
-    font-weight: 400;
-  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 3rem 3rem; }
 
-  .tagline {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 3rem 3rem;
-  }
-
-  /* DROP ZONE */
   .drop-zone {
     border: 1.5px dashed var(--border);
     border-radius: 4px;
@@ -98,466 +74,130 @@
     pointer-events: none;
   }
 
-  .drop-zone:hover, .drop-zone.dragging {
-    border-color: var(--accent);
-    background: #14141a;
-  }
-
-  .drop-zone.dragging {
-    transform: scale(1.005);
-  }
-
-  .drop-icon {
-    font-size: 3rem;
-    margin-bottom: 1.2rem;
-    opacity: 0.6;
-  }
-
-  .drop-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .drop-sub {
-    font-size: 0.82rem;
-    color: var(--muted);
-    font-family: 'DM Mono', monospace;
-    letter-spacing: 0.05em;
-  }
-
+  .drop-zone:hover, .drop-zone.dragging { border-color: var(--accent); background: #14141a; }
+  .drop-zone.dragging { transform: scale(1.005); }
+  .drop-icon { font-size: 3rem; margin-bottom: 1.2rem; opacity: 0.6; }
+  .drop-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text); margin-bottom: 0.5rem; }
+  .drop-sub { font-size: 0.82rem; color: var(--muted); font-family: 'DM Mono', monospace; letter-spacing: 0.05em; }
   #fileInput { display: none; }
 
-  /* PREVIEW */
-  .preview-section {
-    display: none;
-    gap: 2rem;
-    margin-top: 2.5rem;
-    align-items: flex-start;
-  }
-
+  .preview-section { display: none; gap: 2rem; margin-top: 2.5rem; align-items: flex-start; }
   .preview-section.visible { display: flex; }
+  .preview-img-wrap { flex: 0 0 280px; position: relative; }
+  .preview-img-wrap img { width: 100%; border-radius: 4px; display: block; border: 1px solid var(--border); }
+  .img-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; padding: 0.3rem 0.6rem; text-transform: uppercase; }
+  .preview-info { flex: 1; }
+  .preview-info h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--accent); margin-bottom: 0.4rem; }
+  .preview-info p { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; font-family: 'DM Mono', monospace; }
 
-  .preview-img-wrap {
-    flex: 0 0 280px;
-    position: relative;
-  }
+  .btn-analyze { background: var(--accent); color: #0a0a0b; border: none; padding: 0.85rem 2.2rem; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; font-weight: 500; }
+  .btn-analyze:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,169,110,0.2); }
+  .btn-analyze:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
 
-  .preview-img-wrap img {
-    width: 100%;
-    border-radius: 4px;
-    display: block;
-    border: 1px solid var(--border);
-  }
+  .btn-reset { background: transparent; color: var(--muted); border: 1px solid var(--border); padding: 0.85rem 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; margin-left: 0.8rem; }
+  .btn-reset:hover { border-color: var(--muted); color: var(--text); }
 
-  .img-badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background: rgba(0,0,0,0.8);
-    color: var(--accent);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    padding: 0.3rem 0.6rem;
-    text-transform: uppercase;
-  }
-
-  .preview-info {
-    flex: 1;
-  }
-
-  .preview-info h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    color: var(--accent);
-    margin-bottom: 0.4rem;
-  }
-
-  .preview-info p {
-    font-size: 0.82rem;
-    color: var(--muted);
-    margin-bottom: 1.5rem;
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* BUTTON */
-  .btn-analyze {
-    background: var(--accent);
-    color: #0a0a0b;
-    border: none;
-    padding: 0.85rem 2.2rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    border-radius: 2px;
-    font-weight: 500;
-  }
-
-  .btn-analyze:hover {
-    background: var(--accent2);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(200,169,110,0.2);
-  }
-
-  .btn-analyze:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .btn-reset {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 0.85rem 1.5rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    border-radius: 2px;
-    margin-left: 0.8rem;
-  }
-
-  .btn-reset:hover {
-    border-color: var(--muted);
-    color: var(--text);
-  }
-
-  /* LOADING */
-  .loading-section {
-    display: none;
-    text-align: center;
-    padding: 4rem 2rem;
-  }
-
+  .loading-section { display: none; text-align: center; padding: 4rem 2rem; }
   .loading-section.visible { display: block; }
-
-  .loader {
-    display: inline-flex;
-    gap: 0.4rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .loader-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-    animation: pulse 1.4s ease-in-out infinite;
-  }
-
+  .loader { display: inline-flex; gap: 0.4rem; margin-bottom: 1.5rem; }
+  .loader-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.4s ease-in-out infinite; }
   .loader-dot:nth-child(2) { animation-delay: 0.2s; }
   .loader-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes pulse { 0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); } 40% { opacity: 1; transform: scale(1); } }
+  .loading-text { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); letter-spacing: 0.1em; }
+  .loading-step { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; }
 
-  @keyframes pulse {
-    0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-    40% { opacity: 1; transform: scale(1); }
-  }
-
-  .loading-text {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.78rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-  }
-
-  .loading-step {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  /* RESULTS */
-  .results-section {
-    display: none;
-    margin-top: 3rem;
-  }
-
+  .results-section { display: none; margin-top: 3rem; }
   .results-section.visible { display: block; }
+  .results-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .results-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--text); }
+  .results-title span { color: var(--accent); font-style: italic; }
+  .results-count { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
 
-  .results-header {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
+  .analysis-box { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 4px; padding: 1.5rem 2rem; margin-bottom: 2.5rem; }
+  .analysis-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.8rem; }
+  .analysis-text { font-size: 0.88rem; line-height: 1.75; color: #b8b4ae; }
 
-  .results-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    color: var(--text);
-  }
-
-  .results-title span {
-    color: var(--accent);
-    font-style: italic;
-  }
-
-  .results-count {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  /* ANALYSIS BOX */
-  .analysis-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent);
-    border-radius: 4px;
-    padding: 1.5rem 2rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .analysis-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
-  }
-
-  .analysis-text {
-    font-size: 0.88rem;
-    line-height: 1.75;
-    color: #b8b4ae;
-  }
-
-  /* PROMPT CARDS */
-  .prompts-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .prompt-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: border-color 0.25s;
-    animation: fadeUp 0.5s ease forwards;
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
+  .prompts-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+  .prompt-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: border-color 0.25s; animation: fadeUp 0.5s ease forwards; opacity: 0; transform: translateY(12px); }
   .prompt-card:nth-child(1) { animation-delay: 0.1s; }
   .prompt-card:nth-child(2) { animation-delay: 0.2s; }
   .prompt-card:nth-child(3) { animation-delay: 0.3s; }
   .prompt-card:nth-child(4) { animation-delay: 0.4s; }
   .prompt-card:nth-child(5) { animation-delay: 0.5s; }
-
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
   .prompt-card:hover { border-color: rgba(200,169,110,0.3); }
 
-  .prompt-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface2);
-  }
+  .prompt-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); background: var(--surface2); flex-wrap: wrap; gap: 0.5rem; }
+  .prompt-badge-wrap { display: flex; align-items: center; gap: 0.8rem; }
+  .prompt-number { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--accent); line-height: 1; opacity: 0.4; }
+  .prompt-type { display: flex; flex-direction: column; gap: 0.15rem; }
+  .prompt-tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; }
+  .prompt-name { font-size: 0.92rem; font-weight: 500; color: var(--text); }
+  .prompt-header-btns { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
-  .prompt-badge-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
+  .btn-copy { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.45rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border-radius: 2px; display: flex; align-items: center; gap: 0.4rem; }
+  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-copy.copied { border-color: var(--success); color: var(--success); }
 
-  .prompt-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: var(--accent);
-    line-height: 1;
-    opacity: 0.4;
-  }
+  .prompt-body { padding: 1.5rem; }
+  .prompt-text { font-size: 0.87rem; line-height: 1.85; color: #c8c4bc; font-family: 'DM Sans', sans-serif; white-space: pre-wrap; }
 
-  .prompt-type {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
+  /* === MUDANÇA 1 — NEGATIVE PROMPT === */
+  .negative-prompt-block { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+  .negative-prompt-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--danger); text-transform: uppercase; margin-bottom: 0.5rem; opacity: 0.8; }
+  .negative-prompt-text { font-size: 0.82rem; line-height: 1.7; color: #908c88; font-family: 'DM Sans', sans-serif; }
 
-  .prompt-tag {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    color: var(--accent);
-    text-transform: uppercase;
-  }
+  .actions-bottom { margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+  .btn-copy-all { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
+  .btn-copy-all:hover { background: rgba(200,169,110,0.08); }
+  .btn-new { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
+  .btn-new:hover { border-color: var(--muted); color: var(--text); }
 
-  .prompt-name {
-    font-size: 0.92rem;
-    font-weight: 500;
-    color: var(--text);
-  }
+  /* Botão salvar */
+  .btn-save-essay { background: transparent; border: 1px solid var(--success); color: var(--success); padding: 0.8rem 2rem; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.25s; border-radius: 2px; }
+  .btn-save-essay:hover { background: rgba(92,224,154,0.08); }
 
-  .btn-copy {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 0.45rem 1rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .btn-copy:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  .btn-copy.copied {
-    border-color: var(--success);
-    color: var(--success);
-  }
-
-  .prompt-body {
-    padding: 1.5rem;
-  }
-
-  .prompt-text {
-    font-size: 0.87rem;
-    line-height: 1.85;
-    color: #c8c4bc;
-    font-family: 'DM Sans', sans-serif;
-    white-space: pre-wrap;
-  }
-
-  /* COPY ALL */
-  .actions-bottom {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-copy-all {
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 0.8rem 2rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    border-radius: 2px;
-  }
-
-  .btn-copy-all:hover {
-    background: rgba(200,169,110,0.08);
-  }
-
-  .btn-new {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 0.8rem 2rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.25s;
-    border-radius: 2px;
-  }
-
-  .btn-new:hover {
-    border-color: var(--muted);
-    color: var(--text);
-  }
-
-  /* ERROR */
-  .error-box {
-    display: none;
-    background: rgba(224,92,92,0.08);
-    border: 1px solid rgba(224,92,92,0.3);
-    border-radius: 4px;
-    padding: 1.2rem 1.5rem;
-    margin-top: 1.5rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--danger);
-  }
-
+  .error-box { display: none; background: rgba(224,92,92,0.08); border: 1px solid rgba(224,92,92,0.3); border-radius: 4px; padding: 1.2rem 1.5rem; margin-top: 1.5rem; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--danger); }
   .error-box.visible { display: block; }
 
-  /* API KEY BOX */
-  .api-key-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1.5rem 2rem;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
+  .api-key-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.5rem 2rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .api-key-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+  .api-key-input { flex: 1; min-width: 200px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.6rem 1rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.8rem; outline: none; transition: border-color 0.2s; }
+  .api-key-input:focus { border-color: var(--accent); }
+  .api-key-hint { font-size: 0.75rem; color: var(--muted); width: 100%; margin-top: 0.3rem; }
 
-  .api-key-label {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    white-space: nowrap;
-  }
+  /* === MUDANÇA 5 — CAIXA ANIVERSÁRIO === */
+  .birthday-box { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 1.2rem 1.5rem; margin-bottom: 1.2rem; }
+  .birthday-box-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+  .birthday-options { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+  .birthday-radio-label { display: flex; align-items: center; gap: 0.4rem; color: var(--text); cursor: pointer; font-family: 'DM Mono', monospace; font-size: 0.75rem; }
+  .birthday-radio-label input[type="radio"] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; }
+  .birthday-age-wrap { display: none; align-items: center; gap: 0.6rem; margin-top: 0.8rem; }
+  .birthday-age-wrap.visible { display: flex; }
+  .birthday-age-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; }
+  .birthday-age-input { width: 80px; background: var(--surface2); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.8rem; color: var(--text); font-family: 'DM Mono', monospace; font-size: 0.85rem; outline: none; transition: border-color 0.2s; text-align: center; }
+  .birthday-age-input:focus { border-color: var(--accent); }
 
-  .api-key-input {
-    flex: 1;
-    min-width: 200px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    padding: 0.6rem 1rem;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 0.8rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
+  /* === MUDANÇA 4 — BIBLIOTECA === */
+  .library-section { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border); }
+  .library-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+  .library-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--text); }
+  .library-title span { color: var(--accent); font-style: italic; }
+  .library-count { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+  .library-empty { text-align: center; padding: 3rem 2rem; color: var(--muted); font-family: 'DM Mono', monospace; font-size: 0.8rem; letter-spacing: 0.08em; background: var(--surface); border: 1px dashed var(--border); border-radius: 4px; }
+  .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+  .library-card { background: var(--surface); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: border-color 0.25s; }
+  .library-card:hover { border-color: rgba(200,169,110,0.4); }
+  .library-card-img { width: 100%; height: 160px; object-fit: cover; display: block; border-bottom: 1px solid var(--border); }
+  .library-card-body { padding: 1rem; }
+  .library-card-date { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+  .library-card-name { font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.8rem; }
+  .library-card-actions { display: flex; gap: 0.5rem; }
+  .btn-lib { flex: 1; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 0.6rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; border-radius: 2px; text-align: center; }
+  .btn-lib:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-lib.danger:hover { border-color: var(--danger); color: var(--danger); }
 
-  .api-key-input:focus {
-    border-color: var(--accent);
-  }
-
-  .api-key-hint {
-    font-size: 0.75rem;
-    color: var(--muted);
-    width: 100%;
-    margin-top: 0.3rem;
-  }
-
-  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -568,6 +208,7 @@
     .container { padding: 2rem 1.2rem; }
     .preview-section { flex-direction: column; }
     .preview-img-wrap { flex: none; width: 100%; }
+    .library-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -575,7 +216,7 @@
 
 <header>
   <div class="logo">LENS <span>ai</span></div>
-  <div class="tagline">Gerador de Prompts Fotográficos</div>
+  <div class="tagline">Gerador de Prompts · Flow Labs</div>
 </header>
 
 <div class="container">
@@ -604,6 +245,25 @@
     <div class="preview-info">
       <h3>Imagem carregada</h3>
       <p id="imgMeta">—</p>
+
+      <!-- === MUDANÇA 5 — CAIXA ANIVERSÁRIO === -->
+      <div class="birthday-box">
+        <div class="birthday-box-title">◈ Este ensaio é de aniversário?</div>
+        <div class="birthday-options">
+          <label class="birthday-radio-label">
+            <input type="radio" name="birthday" value="nao" checked onchange="toggleBirthday()"> Não
+          </label>
+          <label class="birthday-radio-label">
+            <input type="radio" name="birthday" value="sim" onchange="toggleBirthday()"> Sim
+          </label>
+        </div>
+        <div class="birthday-age-wrap" id="birthdayAgeWrap">
+          <span class="birthday-age-label">Qual a idade?</span>
+          <input type="number" id="birthdayAge" class="birthday-age-input" placeholder="Ex: 30" min="1" max="120" />
+        </div>
+      </div>
+      <!-- FIM MUDANÇA 5 -->
+
       <button class="btn-analyze" id="btnAnalyze" onclick="analyzeImage()">
         ◈ &nbsp;Analisar e Gerar Prompts
       </button>
@@ -631,7 +291,7 @@
       <div>
         <div class="results-title">5 Prompts <span>gerados</span></div>
       </div>
-      <div class="results-count">Ensaio fotográfico · IA</div>
+      <div class="results-count">Ensaio fotográfico · Flow Labs</div>
     </div>
 
     <div class="analysis-box" id="analysisBox">
@@ -643,8 +303,19 @@
 
     <div class="actions-bottom">
       <button class="btn-copy-all" onclick="copyAll()">⬡ &nbsp;Copiar todos os prompts</button>
+      <!-- === MUDANÇA 4 — BOTÃO SALVAR === -->
+      <button class="btn-save-essay" onclick="saveEssay()">◈ &nbsp;Salvar Ensaio</button>
       <button class="btn-new" onclick="resetAll()">↺ &nbsp;Nova imagem</button>
     </div>
+  </div>
+
+  <!-- === MUDANÇA 4 — BIBLIOTECA DE ENSAIOS === -->
+  <div class="library-section" id="librarySection">
+    <div class="library-header">
+      <div class="library-title">Biblioteca de <span>Ensaios</span></div>
+      <div class="library-count" id="libraryCount"></div>
+    </div>
+    <div id="libraryGrid"></div>
   </div>
 
 </div>
@@ -658,9 +329,15 @@ const PROMPT_TYPES = [
   { tag: 'Prompt 05', name: 'Variação de Movimento / Expressão' },
 ];
 
+// === MUDANÇA 1 — NEGATIVE PROMPT FIXO ===
+const NEGATIVE_PROMPT = 'low quality, deformed face, extra fingers, plastic skin, over-smoothing, unrealistic lighting, distorted anatomy, AI artifacts, blurred eyes, bad proportions, blurry, out of focus, watermark, text, duplicate, ugly, disfigured';
+
 let currentImageBase64 = null;
 let currentImageType = 'image/jpeg';
+let currentImageDataUrl = null;
 let allPromptsText = '';
+let lastAnalysisText = '';
+let lastPromptMatches = [];
 
 // DROP ZONE
 const dropZone = document.getElementById('dropZone');
@@ -686,6 +363,7 @@ function loadImage(file) {
   reader.onload = ev => {
     const dataUrl = ev.target.result;
     currentImageBase64 = dataUrl.split(',')[1];
+    currentImageDataUrl = dataUrl;
     document.getElementById('previewImg').src = dataUrl;
     document.getElementById('imgMeta').textContent = `${file.name} · ${(file.size/1024).toFixed(0)} KB`;
     document.getElementById('previewSection').classList.add('visible');
@@ -699,11 +377,15 @@ function loadImage(file) {
 
 function resetAll() {
   currentImageBase64 = null;
+  currentImageDataUrl = null;
   document.getElementById('previewSection').classList.remove('visible');
   document.getElementById('resultsSection').classList.remove('visible');
   document.getElementById('loadingSection').classList.remove('visible');
   dropZone.style.display = '';
   fileInput.value = '';
+  document.querySelector('input[name="birthday"][value="nao"]').checked = true;
+  document.getElementById('birthdayAgeWrap').classList.remove('visible');
+  document.getElementById('birthdayAge').value = '';
   hideError();
 }
 
@@ -717,11 +399,23 @@ function hideError() {
   document.getElementById('errorBox').classList.remove('visible');
 }
 
+// === MUDANÇA 5 — TOGGLE ANIVERSÁRIO ===
+function toggleBirthday() {
+  const isBirthday = document.querySelector('input[name="birthday"]:checked').value === 'sim';
+  const wrap = document.getElementById('birthdayAgeWrap');
+  if (isBirthday) {
+    wrap.classList.add('visible');
+  } else {
+    wrap.classList.remove('visible');
+    document.getElementById('birthdayAge').value = '';
+  }
+}
+
 const LOADING_STEPS = [
   ['Analisando composição visual...', 'Identificando enquadramento, ângulo e lente'],
   ['Mapeando iluminação...', 'Detectando direção, intensidade e qualidade de luz'],
   ['Avaliando pose e expressão...', 'Analisando posição corporal e atmosfera'],
-  ['Gerando prompts fotográficos...', 'Criando 5 variações detalhadas do ensaio'],
+  ['Gerando prompts para Flow Labs...', 'Criando 5 variações detalhadas do ensaio'],
 ];
 
 let loadingInterval = null;
@@ -751,39 +445,50 @@ async function analyzeImage() {
     return;
   }
 
+  // === MUDANÇA 5/6 — LER DADOS DE ANIVERSÁRIO ===
+  const isBirthday = document.querySelector('input[name="birthday"]:checked').value === 'sim';
+  const birthdayAge = document.getElementById('birthdayAge').value.trim();
+  const birthdayInfo = isBirthday && birthdayAge
+    ? `\n\nIMPORTANTE: Este é um ENSAIO DE ANIVERSÁRIO DE ${birthdayAge} ANOS. Incorpore isso naturalmente em todos os prompts: mencione "ensaio fotográfico de aniversário de ${birthdayAge} anos", inclua elementos de comemoração elegantes (flores, balões sofisticados, detalhes festivos sutis), estilo festivo elegante condizente com a idade, decoração coerente com a celebração. Mantenha o estilo fotográfico profissional editorial.`
+    : '';
+
   document.getElementById('btnAnalyze').disabled = true;
   document.getElementById('loadingSection').classList.add('visible');
   document.getElementById('resultsSection').classList.remove('visible');
   startLoadingAnimation();
 
-  const systemPrompt = `Você é um especialista em fotografia profissional e engenharia de prompts para geração de imagens com IA. Analise imagens e gere prompts extremamente detalhados em português. SEMPRE use exatamente as marcações de seção solicitadas, sem modificá-las.`;
+  // === MUDANÇA 2 — SYSTEM PROMPT OTIMIZADO PARA FLOW LABS ===
+  const systemPrompt = `Você é um especialista em fotografia profissional e engenharia de prompts para o Flow Labs. Seus prompts devem ser extremamente detalhados e otimizados para gerar fotografias ultra-realistas, incluindo sempre: descrição fotográfica extremamente detalhada, iluminação profissional de estúdio, especificações de lente e câmera, textura realista da pele com poros visíveis, estilo fotográfico editorial de alto nível, e máxima fidelidade facial. SEMPRE use exatamente as marcações de seção solicitadas, sem modificá-las.`;
 
-  const userPrompt = `Analise esta imagem de referência profundamente e gere 5 prompts detalhados em português para recriar um ensaio fotográfico baseado nela.
+  // === MUDANÇA 3 — COMANDO FIXO DE ROSTO ===
+  const facePreamble = `Crie um retrato profissional ultra-realista de uma mulher. Use exatamente o mesmo rosto das fotos de referência anexadas. Preserve identidade facial, proporções, formato do rosto, olhos e expressão.`;
 
-REGRA ABSOLUTA: Responda APENAS com o conteúdo estruturado abaixo. Use EXATAMENTE estas marcações de abertura e fechamento. Não adicione texto fora das marcações.
+  const userPrompt = `Analise esta imagem de referência profundamente e gere 5 prompts detalhados em português para recriar um ensaio fotográfico no Flow Labs.${birthdayInfo}
+
+REGRA ABSOLUTA: Responda APENAS com o conteúdo estruturado abaixo. Use EXATAMENTE estas marcações. Não adicione texto fora das marcações.
 
 [ANALISE_INICIO]
-Análise técnica completa: cenário/ambiente, pose corporal, enquadramento, ângulo da câmera, tipo de lente e distância focal, iluminação (direção, intensidade, soft/hard light, luz principal, luz de recorte, luz de preenchimento), estilo fotográfico, composição, profundidade de campo, textura de pele, roupas e acessórios, atmosfera. Descreva também com máximo detalhe: formato do rosto, cor e formato dos olhos, sobrancelhas, nariz, boca/lábios, mandíbula, cor e textura do cabelo, tom de pele exato.
+Análise técnica completa: cenário/ambiente, pose corporal, enquadramento, ângulo da câmera, tipo de lente e distância focal, iluminação (direção, intensidade, soft/hard light, luz principal, luz de recorte, luz de preenchimento), estilo fotográfico, composição, profundidade de campo, textura de pele, roupas e acessórios, atmosfera. Descreva com máximo detalhe: formato do rosto, cor e formato dos olhos, sobrancelhas, nariz, boca/lábios, mandíbula, cor e textura do cabelo, tom de pele exato.
 [ANALISE_FIM]
 
 [PROMPT1_INICIO]
-RECRIAÇÃO FIEL. Escreva um prompt fotográfico extremamente detalhado. Inclua obrigatoriamente: (1) CENÁRIO: ambiente, fundo, superfícies, iluminação ambiente; (2) MODELO: descreva com precisão máxima o rosto — formato oval/quadrado/redondo/coração, olhos amendoados/redondos com cor exata, sobrancelhas definidas/arqueadas, nariz fino/largo, lábios carnudos/finos, maçãs do rosto, queixo, tom de pele exato como "pele morena clara com subtom dourado", textura da pele com poros visíveis, sardas ou imperfeições naturais; cabelo — cor, comprimento, textura ondulada/lisa/cacheada, como está posicionado; (3) POSE: posição exata do corpo, membros, direção do olhar; (4) ROUPA E ACESSÓRIOS: detalhes exatos; (5) CÂMERA: Canon EOS R5 com lente 85mm f/1.4, ângulo dos olhos, distância X metros; (6) ILUMINAÇÃO: softbox principal a 45° esquerda, luz de recorte direita, difusão, temperatura de cor; (7) ESTILO: fotografia editorial hiper-realista, 8K ultra HD, profundidade de campo rasa com bokeh suave, cores neutras com leve gradação cinematográfica; (8) FIDELIDADE FACIAL: rosto idêntico ao da referência, mesmas proporções faciais, mesmo olhar, face:1.4 likeness preservation.
+Inicie com: "${facePreamble}" — depois continue: RECRIAÇÃO FIEL otimizada para Flow Labs. Inclua: (1) CENÁRIO: ambiente, fundo, superfícies, iluminação ambiente${isBirthday && birthdayAge ? `, decoração de aniversário de ${birthdayAge} anos` : ''}; (2) MODELO: rosto com precisão máxima — formato, olhos com cor exata, sobrancelhas, nariz, lábios, tom de pele exato, textura da pele com poros visíveis; cabelo — cor, comprimento, textura; (3) POSE: posição exata do corpo e membros; (4) ROUPA E ACESSÓRIOS: detalhes exatos; (5) CÂMERA: Canon EOS R5 com lente 85mm f/1.4, ângulo dos olhos; (6) ILUMINAÇÃO: softbox principal 45° esquerda, luz de recorte direita, temperatura de cor 5200K; (7) ESTILO: fotografia editorial hiper-realista, 8K ultra HD, bokeh suave, gradação cinematográfica; (8) FIDELIDADE: face:1.4 likeness preservation, rosto idêntico à referência.
 [PROMPT1_FIM]
 
 [PROMPT2_INICIO]
-VARIAÇÃO DE ÂNGULO. Mesmo cenário, iluminação e modelo do Prompt 1 com todos os detalhes faciais idênticos. Altere apenas: câmera posicionada levemente a 30° lateral direita em relação ao modelo, ângulo ligeiramente superior (câmera 10cm acima da linha dos olhos), criando perspectiva diferente. Mantenha todos os detalhes do rosto, pele, cabelo, roupa e iluminação. Inclua todos os 8 pontos do Prompt 1 com a mesma profundidade descritiva. face:1.4 likeness preservation, mesmas proporções faciais da referência.
+Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE ÂNGULO para Flow Labs. Mesmo cenário e modelo do Prompt 1${isBirthday && birthdayAge ? `, aniversário de ${birthdayAge} anos` : ''}. Altere apenas: câmera a 30° lateral direita, ângulo ligeiramente superior (10cm acima da linha dos olhos). Mantenha detalhes faciais, pele, cabelo, roupa, iluminação. Inclua câmera Canon EOS R5 85mm f/1.4, iluminação e estilo editorial 8K. face:1.4 likeness preservation.
 [PROMPT2_FIM]
 
 [PROMPT3_INICIO]
-VARIAÇÃO DE POSE. Mesmo cenário, iluminação e modelo do Prompt 1 com todos os detalhes faciais idênticos. Altere apenas: pose corporal — modelo agora com corpo em 3/4, peso apoiado na perna direita, ombro esquerdo levemente à frente, braços em posição natural relaxada, olhar direto para a câmera. Mantenha todos os detalhes do rosto, pele, cabelo, roupa e iluminação. Inclua todos os 8 pontos do Prompt 1 com a mesma profundidade descritiva. face:1.4 likeness preservation.
+Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE POSE para Flow Labs. Mesmo cenário e modelo do Prompt 1${isBirthday && birthdayAge ? `, aniversário de ${birthdayAge} anos` : ''}. Altere apenas: corpo em 3/4, peso na perna direita, ombro esquerdo à frente, braços relaxados, olhar direto. Mantenha detalhes faciais, pele, cabelo, roupa, iluminação. Inclua câmera e estilo editorial 8K. face:1.4 likeness preservation.
 [PROMPT3_FIM]
 
 [PROMPT4_INICIO]
-VARIAÇÃO DE ENQUADRAMENTO. Mesmo cenário, iluminação e modelo do Prompt 1 com todos os detalhes faciais idênticos. Altere apenas: enquadramento em close-up do rosto e ombros (portrait tight crop), câmera bem próxima capturando máximo detalhe da pele, poros, textura, microexpressão, detalhes dos olhos com catchlight visível, volume dos lábios, fios de cabelo individuais. Profundidade de campo extremamente rasa, bokeh muito suave no fundo. Inclua todos os 8 pontos do Prompt 1 com a mesma profundidade descritiva. face:1.4 likeness preservation.
+Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE ENQUADRAMENTO para Flow Labs. Mesmo cenário e modelo do Prompt 1${isBirthday && birthdayAge ? `, aniversário de ${birthdayAge} anos` : ''}. Altere apenas: close-up do rosto e ombros, máximo detalhe da pele, poros, olhos com catchlight, lábios, fios de cabelo individuais. Bokeh extremamente suave. Canon EOS R5 85mm f/1.4, editorial 8K. face:1.4 likeness preservation.
 [PROMPT4_FIM]
 
 [PROMPT5_INICIO]
-VARIAÇÃO DE MOVIMENTO E EXPRESSÃO. Mesmo cenário, iluminação e modelo do Prompt 1 com todos os detalhes faciais idênticos. Altere apenas: micro sorriso sutil nos lábios, olhar levemente desviado 5° para o lado como se olhasse algo fora do frame, cabeça com inclinação de 8° para o lado direito, fio de cabelo solto caindo naturalmente sobre o rosto. Sensação de movimento congelado, momento espontâneo capturado. Inclua todos os 8 pontos do Prompt 1 com a mesma profundidade descritiva. face:1.4 likeness preservation.
+Inicie com: "${facePreamble}" — depois continue: VARIAÇÃO DE MOVIMENTO E EXPRESSÃO para Flow Labs. Mesmo cenário e modelo do Prompt 1. Altere apenas: micro sorriso sutil, olhar desviado 5° para o lado, cabeça com inclinação de 8° para a direita, fio de cabelo solto${isBirthday && birthdayAge ? `, expressão de alegria genuína celebrando ${birthdayAge} anos` : ''}. Momento espontâneo congelado. Canon EOS R5 85mm, iluminação editorial. face:1.4 likeness preservation.
 [PROMPT5_FIM]`;
 
   try {
@@ -834,7 +539,6 @@ function parseAndRender(text) {
   stopLoadingAnimation();
   document.getElementById('loadingSection').classList.remove('visible');
 
-  // Try tag-based parsing first
   let analysisText = extractBetween(text, '[ANALISE_INICIO]', '[ANALISE_FIM]');
   const promptMatches = [];
   for (let i = 1; i <= 5; i++) {
@@ -842,33 +546,24 @@ function parseAndRender(text) {
     promptMatches.push(p);
   }
 
-  // Fallback: if tag parsing fails, try splitting by numbered sections
   const allTagsFound = analysisText && promptMatches.every(p => p);
   if (!allTagsFound) {
-    // Split by common heading patterns the model might use
     const sections = text.split(/\n(?=#+\s|##\s|\*{2}[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ]|\d+[\.\)]\s|PROMPT\s*\d|ANÁLISE|RECRIA|VARIA)/i);
-    
-    // Try to find analysis section
+
     if (!analysisText) {
       const aIdx = sections.findIndex(s => /análise|técni/i.test(s.slice(0,60)));
-      if (aIdx >= 0) {
-        analysisText = sections[aIdx].replace(/^[#*\d\.\)\s]+análise[^\n]*/i, '').trim();
-      }
+      if (aIdx >= 0) analysisText = sections[aIdx].replace(/^[#*\d\.\)\s]+análise[^\n]*/i, '').trim();
     }
 
-    // Try to find prompt sections by order
     const promptKeywords = ['recria', 'ângulo|angulo', 'pose', 'enquadra', 'movimento|expres'];
     promptKeywords.forEach((kw, idx) => {
       if (!promptMatches[idx]) {
         const reg = new RegExp(kw, 'i');
         const sIdx = sections.findIndex(s => reg.test(s.slice(0, 80)));
-        if (sIdx >= 0) {
-          promptMatches[idx] = sections[sIdx].replace(/^[#*\d\.\)\s—–-]+[^\n]*/i, '').trim();
-        }
+        if (sIdx >= 0) promptMatches[idx] = sections[sIdx].replace(/^[#*\d\.\)\s—–-]+[^\n]*/i, '').trim();
       }
     });
 
-    // Last resort: split by lines containing "PROMPT" keyword
     if (promptMatches.some(p => !p)) {
       const byPrompt = text.split(/(?=PROMPT\s*\d)/i);
       byPrompt.forEach(chunk => {
@@ -883,23 +578,23 @@ function parseAndRender(text) {
     }
   }
 
-  // Fill any still-missing with a graceful message
   if (!analysisText) analysisText = 'Análise não pôde ser extraída automaticamente.';
   for (let i = 0; i < 5; i++) {
-    if (!promptMatches[i]) promptMatches[i] = 'Prompt não encontrado. Tente gerar novamente.'
+    if (!promptMatches[i]) promptMatches[i] = 'Prompt não encontrado. Tente gerar novamente.';
   }
 
-  // Render analysis
-  document.getElementById('analysisText').textContent = analysisText || '';
+  lastAnalysisText = analysisText;
+  lastPromptMatches = [...promptMatches];
 
-  // Render prompts
+  document.getElementById('analysisText').textContent = analysisText;
+
   const grid = document.getElementById('promptsGrid');
   grid.innerHTML = '';
   allPromptsText = '';
 
   promptMatches.forEach((promptText, idx) => {
     const type = PROMPT_TYPES[idx];
-    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\n${promptText}\n\n\n`;
+    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\nPROMPT:\n${promptText}\n\nNEGATIVE PROMPT:\n${NEGATIVE_PROMPT}\n\n\n`;
 
     const card = document.createElement('div');
     card.className = 'prompt-card';
@@ -912,12 +607,22 @@ function parseAndRender(text) {
             <div class="prompt-name">${type.name}</div>
           </div>
         </div>
-        <button class="btn-copy" data-idx="${idx}">
-          <span>⬡</span> <span class="copy-label">Copiar</span>
-        </button>
+        <div class="prompt-header-btns">
+          <button class="btn-copy" data-idx="${idx}" data-type="prompt">
+            <span>⬡</span> <span class="copy-label">Copiar Prompt</span>
+          </button>
+          <button class="btn-copy" data-idx="${idx}" data-type="negative">
+            <span>⊘</span> <span class="copy-label">Neg. Prompt</span>
+          </button>
+        </div>
       </div>
       <div class="prompt-body">
         <div class="prompt-text" id="promptText${idx}">${escapeHtml(promptText)}</div>
+        <!-- === MUDANÇA 1 — NEGATIVE PROMPT === -->
+        <div class="negative-prompt-block">
+          <div class="negative-prompt-label">⊘ Negative Prompt</div>
+          <div class="negative-prompt-text">${escapeHtml(NEGATIVE_PROMPT)}</div>
+        </div>
       </div>
     `;
     grid.appendChild(card);
@@ -932,18 +637,17 @@ function escapeHtml(text) {
   return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// Event delegation for copy buttons (works with dynamically created elements)
 document.addEventListener('click', function(e) {
   const btn = e.target.closest('.btn-copy[data-idx]');
   if (!btn) return;
   const idx = btn.getAttribute('data-idx');
-  const el = document.getElementById('promptText' + idx);
-  if (!el) return;
-  const text = el.textContent;
+  const type = btn.getAttribute('data-type');
+  let textToCopy = type === 'negative' ? NEGATIVE_PROMPT : (document.getElementById('promptText' + idx)?.textContent || '');
+
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(() => flashCopied(btn)).catch(() => fallbackCopy(text, btn));
+    navigator.clipboard.writeText(textToCopy).then(() => flashCopied(btn)).catch(() => fallbackCopy(textToCopy, btn));
   } else {
-    fallbackCopy(text, btn);
+    fallbackCopy(textToCopy, btn);
   }
 });
 
@@ -959,18 +663,10 @@ function fallbackCopy(text, btn) {
 
 function flashCopied(btn) {
   const label = btn.querySelector('.copy-label');
+  const orig = label ? label.textContent : '';
   btn.classList.add('copied');
   if (label) label.textContent = 'Copiado!';
-  setTimeout(() => {
-    btn.classList.remove('copied');
-    if (label) label.textContent = 'Copiar';
-  }, 2000);
-}
-
-function copyPrompt(btn, idx) {
-  // legacy — kept for safety
-  const el = document.getElementById('promptText' + idx);
-  if (el) fallbackCopy(el.textContent, btn);
+  setTimeout(() => { btn.classList.remove('copied'); if (label) label.textContent = orig; }, 2000);
 }
 
 function copyAll() {
@@ -980,17 +676,158 @@ function copyAll() {
     navigator.clipboard.writeText(allPromptsText).then(() => {
       btn.textContent = '✓ Todos copiados!';
       setTimeout(() => { btn.textContent = orig; }, 2500);
-    }).catch(() => {
-      fallbackCopy(allPromptsText, btn);
-      btn.textContent = '✓ Todos copiados!';
-      setTimeout(() => { btn.textContent = orig; }, 2500);
-    });
+    }).catch(() => { fallbackCopy(allPromptsText, btn); btn.textContent = '✓ Todos copiados!'; setTimeout(() => { btn.textContent = orig; }, 2500); });
   } else {
     fallbackCopy(allPromptsText, btn);
     btn.textContent = '✓ Todos copiados!';
     setTimeout(() => { btn.textContent = orig; }, 2500);
   }
 }
+
+// ============================================================
+// === MUDANÇA 4 — BIBLIOTECA DE ENSAIOS (localStorage) ===
+// ============================================================
+
+function getLibrary() {
+  try { return JSON.parse(localStorage.getItem('lensai_library') || '[]'); } catch { return []; }
+}
+
+function saveLibrary(data) {
+  localStorage.setItem('lensai_library', JSON.stringify(data));
+}
+
+function saveEssay() {
+  if (!lastPromptMatches.length || !currentImageDataUrl) {
+    showError('Gere os prompts antes de salvar o ensaio.');
+    return;
+  }
+
+  const isBirthday = document.querySelector('input[name="birthday"]:checked').value === 'sim';
+  const birthdayAge = document.getElementById('birthdayAge').value.trim();
+  const label = isBirthday && birthdayAge
+    ? `Aniversário ${birthdayAge} anos — ${new Date().toLocaleDateString('pt-BR')}`
+    : `Ensaio — ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'})}`;
+
+  const essay = {
+    id: Date.now(),
+    date: new Date().toISOString(),
+    label,
+    image: currentImageDataUrl,
+    analysis: lastAnalysisText,
+    prompts: lastPromptMatches,
+  };
+
+  const library = getLibrary();
+  library.unshift(essay);
+  saveLibrary(library);
+  renderLibrary();
+
+  const btn = document.querySelector('.btn-save-essay');
+  const orig = btn.textContent;
+  btn.textContent = '✓ Ensaio salvo!';
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+  document.getElementById('librarySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function deleteEssay(id) {
+  const library = getLibrary().filter(e => e.id !== id);
+  saveLibrary(library);
+  renderLibrary();
+}
+
+function openEssay(id) {
+  const essay = getLibrary().find(e => e.id === id);
+  if (!essay) return;
+
+  lastAnalysisText = essay.analysis;
+  lastPromptMatches = essay.prompts;
+  currentImageDataUrl = essay.image;
+  currentImageBase64 = essay.image.split(',')[1];
+
+  document.getElementById('previewImg').src = essay.image;
+  document.getElementById('imgMeta').textContent = essay.label;
+  document.getElementById('previewSection').classList.add('visible');
+  dropZone.style.display = 'none';
+  document.getElementById('analysisText').textContent = essay.analysis;
+
+  const grid = document.getElementById('promptsGrid');
+  grid.innerHTML = '';
+  allPromptsText = '';
+
+  essay.prompts.forEach((promptText, idx) => {
+    const type = PROMPT_TYPES[idx];
+    allPromptsText += `=== ${type.tag.toUpperCase()} — ${type.name.toUpperCase()} ===\n\nPROMPT:\n${promptText}\n\nNEGATIVE PROMPT:\n${NEGATIVE_PROMPT}\n\n\n`;
+
+    const card = document.createElement('div');
+    card.className = 'prompt-card';
+    card.innerHTML = `
+      <div class="prompt-header">
+        <div class="prompt-badge-wrap">
+          <div class="prompt-number">0${idx+1}</div>
+          <div class="prompt-type">
+            <div class="prompt-tag">${type.tag}</div>
+            <div class="prompt-name">${type.name}</div>
+          </div>
+        </div>
+        <div class="prompt-header-btns">
+          <button class="btn-copy" data-idx="${idx}" data-type="prompt"><span>⬡</span> <span class="copy-label">Copiar Prompt</span></button>
+          <button class="btn-copy" data-idx="${idx}" data-type="negative"><span>⊘</span> <span class="copy-label">Neg. Prompt</span></button>
+        </div>
+      </div>
+      <div class="prompt-body">
+        <div class="prompt-text" id="promptText${idx}">${escapeHtml(promptText)}</div>
+        <div class="negative-prompt-block">
+          <div class="negative-prompt-label">⊘ Negative Prompt</div>
+          <div class="negative-prompt-text">${escapeHtml(NEGATIVE_PROMPT)}</div>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById('resultsSection').classList.add('visible');
+  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderLibrary() {
+  const library = getLibrary();
+  const grid = document.getElementById('libraryGrid');
+  const count = document.getElementById('libraryCount');
+
+  count.textContent = library.length > 0 ? `${library.length} ensaio${library.length > 1 ? 's' : ''} salvo${library.length > 1 ? 's' : ''}` : '';
+
+  if (library.length === 0) {
+    grid.innerHTML = '<div class="library-empty">Nenhum ensaio salvo ainda · Clique em "Salvar Ensaio" após gerar os prompts</div>';
+    return;
+  }
+
+  const libGrid = document.createElement('div');
+  libGrid.className = 'library-grid';
+
+  library.forEach(essay => {
+    const card = document.createElement('div');
+    card.className = 'library-card';
+    const dateStr = new Date(essay.date).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', year:'numeric' });
+    card.innerHTML = `
+      <img class="library-card-img" src="${essay.image}" alt="Ensaio" />
+      <div class="library-card-body">
+        <div class="library-card-date">${dateStr}</div>
+        <div class="library-card-name">${escapeHtml(essay.label)}</div>
+        <div class="library-card-actions">
+          <button class="btn-lib" onclick="openEssay(${essay.id})">↩ Abrir</button>
+          <button class="btn-lib danger" onclick="deleteEssay(${essay.id})">✕ Excluir</button>
+        </div>
+      </div>
+    `;
+    libGrid.appendChild(card);
+  });
+
+  grid.innerHTML = '';
+  grid.appendChild(libGrid);
+}
+
+// Inicializar biblioteca ao carregar
+renderLibrary();
 </script>
 </body>
 </html>
